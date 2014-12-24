@@ -3,6 +3,9 @@
 
 #include <QObject>
 
+#include "quote.h"
+#include "quotedb.h"
+
 class QuoteController : public QObject
 {
     Q_OBJECT
@@ -19,10 +22,10 @@ signals:
 
 public slots:
 
-
 private:
-    QString m_quoteText;
-    QString m_philosopherText;
+    QuoteDB m_quotesDB;
+    Quote::QuotePtr m_currentQuote;
+
 };
 
 #endif // QUOTECONTROLLER_H

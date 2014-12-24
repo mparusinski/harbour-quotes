@@ -15,7 +15,9 @@ TARGET = PhilosophyQuotes
 CONFIG += sailfishapp
 
 SOURCES += src/PhilosophyQuotes.cpp \
-    src/quotecontroller.cpp
+    src/quotecontroller.cpp \
+    src/quote.cpp \
+    src/quotedb.cpp
 
 OTHER_FILES += qml/PhilosophyQuotes.qml \
     qml/cover/CoverPage.qml \
@@ -33,6 +35,8 @@ CONFIG += sailfishapp_i18n
 TRANSLATIONS += translations/PhilosophyQuotes-de.ts
 
 HEADERS += \
-    src/quotecontroller.h
+    src/quotecontroller.h \
+    src/quote.h \
+    src/quotedb.h
 
 
