@@ -3,7 +3,7 @@
 #include <sailfishapp.h>
 
 #include <QFile>
-#include <QTextStream>
+#include <QJsonDocument>
 #include <QDebug>
 #include <QStringList>
 #include <QDir>
@@ -11,7 +11,10 @@
 QuoteDB::QuoteDB(QObject *parent) :
     QObject(parent)
 {
-    readQuotesFile(SailfishApp::pathTo("qml/content/quotes_en.txt"));
+    if (!readQuotesFile(SailfishApp::pathTo("qml/content/quotes_en.json"))) {
+        Quote::QuotePtr emptyQuote = Quote::QuotePtr(new Quote("Quote missing", "No philosopher"));
+        m_quotes.push_back(emptyQuote);
+    }
     m_visitorSet = false;
 }
 
@@ -40,23 +43,30 @@ bool QuoteDB::readQuotesFile(QUrl pathToFile) {
         return false;
     }
 
-    QTextStream quotesStream(&quotesFile);
-    quotesStream.setCodec("UTF-8");
-    QString line = quotesStream.readLine();
-    while (!line.isNull()) {
-        QStringList tokens = line.split("-:-");
-        if (tokens.length() != 2) {
-            qCritical() << "File is malformed, line \"" << line << "\" does not have two tokens";
-            quotesFile.close();
-            return false;
-        }
-        QString quoteText = tokens[0];
-        QString philosopher = tokens[1];
-        qDebug() << philosopher;
-        Quote::QuotePtr currentQuote(new Quote(philosopher, quoteText));
-        m_quotes.push_back(currentQuote);
+    QString fileContent = quotesFile.readAll();
+    QJsonParseError parseError;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(fileContent.toUtf8(), &parseError);
+    qWarning() << parseError.errorString();
 
-        line = quotesStream.readLine();
+    QJsonObject jsonObj = jsonDoc.object();
+    QJsonArray quotes = jsonObj["quotes"].toArray();
+
+    if (quotes == QJsonArray()) {
+        qCritical() << "Malformed JSON file";
+        quotesFile.close();
+        return false;
+    }
+
+    QJsonArray::const_iterator iter;
+    for (iter = quotes.constBegin(); iter != quotes.constEnd(); ++iter) {
+        const QJsonObject jsonQuoteObj = (*iter).toObject();
+        QString quoteText = jsonQuoteObj["quoteText"].toString();
+        QString philosopher = jsonQuoteObj["philosopher"].toString();
+
+        qDebug() << philosopher;
+
+        Quote::QuotePtr quote(new Quote(philosopher, quoteText));
+        m_quotes.push_back(quote);
     }
 
     quotesFile.close();

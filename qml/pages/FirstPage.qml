@@ -91,8 +91,7 @@ Page {
                     wrapMode: Text.WordWrap
 //                    text: "\t\"That which does not kill you makes you stronger\""
                     text: quoteText()
-
-                    color: Theme.secondaryHighlightColor
+                    color: Theme.primaryColor
                     font.pixelSize: Theme.fontSizeLarge
                 }
                 Text {
