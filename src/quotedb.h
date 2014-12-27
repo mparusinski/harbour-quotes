@@ -23,6 +23,8 @@ private:
     ContainerType m_quotes;
     bool m_visitorSet;
     ContainerType::ConstIterator m_visitorIterator;
+
+    bool readQuotesFile(QUrl pathToFile);
 };
 
 #endif // QUOTEDB_H

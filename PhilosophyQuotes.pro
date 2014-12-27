@@ -27,6 +27,7 @@ OTHER_FILES += qml/PhilosophyQuotes.qml \
     rpm/PhilosophyQuotes.spec \
     rpm/PhilosophyQuotes.yaml \
     translations/*.ts \
+    qml/content/quotes_en.txt \
     PhilosophyQuotes.desktop
 
 # to disable building translations every time, comment out the
