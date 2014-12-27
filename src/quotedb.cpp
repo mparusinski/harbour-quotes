@@ -44,7 +44,7 @@ bool QuoteDB::readQuotesFile(QUrl pathToFile) {
     quotesStream.setCodec("UTF-8");
     QString line = quotesStream.readLine();
     while (!line.isNull()) {
-        QStringList tokens = line.split(":");
+        QStringList tokens = line.split("-:-");
         if (tokens.length() != 2) {
             qCritical() << "File is malformed, line \"" << line << "\" does not have two tokens";
             quotesFile.close();
