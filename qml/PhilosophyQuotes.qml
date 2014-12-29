@@ -19,6 +19,6 @@ import "pages"
 
 ApplicationWindow
 {
-    initialPage: Component { FirstPage { } }
+    initialPage: Component { QuotePage { } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 }

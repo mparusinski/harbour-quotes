@@ -21,14 +21,15 @@ SOURCES += src/PhilosophyQuotes.cpp \
 
 OTHER_FILES += qml/PhilosophyQuotes.qml \
     qml/cover/CoverPage.qml \
-    qml/pages/FirstPage.qml \
     qml/content/images/*.png \
     rpm/PhilosophyQuotes.changes.in \
     rpm/PhilosophyQuotes.spec \
     rpm/PhilosophyQuotes.yaml \
     translations/*.ts \
     qml/content/quotes_en.json \
-    PhilosophyQuotes.desktop
+    PhilosophyQuotes.desktop \
+    qml/pages/AboutPage.qml \
+    qml/pages/QuotePage.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

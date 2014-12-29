@@ -2,6 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.0">
 <context>
+    <name>AboutPage</name>
+    <message>
+        <source>About Philosophy Quotes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CoverPage</name>
     <message>
         <source>&lt;b&gt;Cogito Ergo Sum&lt;/b&gt;</source>
@@ -20,6 +27,10 @@
     </message>
     <message>
         <source>Next quote</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

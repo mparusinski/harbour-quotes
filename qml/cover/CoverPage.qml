@@ -40,7 +40,7 @@ CoverBackground {
                 horizontalAlignment: Text.Center
                 wrapMode: Text.WordWrap
                 text: qsTr("<b>Cogito Ergo Sum</b>")
-                color: Theme.primaryHighlightColor
+                color: Theme.primaryColor
                 font.pixelSize: Theme.fontSizeSmall
             }
         }
