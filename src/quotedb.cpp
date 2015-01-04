@@ -78,8 +78,6 @@ bool QuoteDB::readQuotesFile(QUrl pathToFile) {
         QString quoteText = jsonQuoteObj["quoteText"].toString();
         QString philosopher = jsonQuoteObj["philosopher"].toString();
 
-        qDebug() << philosopher;
-
         Quote::QuotePtr quote(new Quote(philosopher, quoteText));
         m_quotes.push_back(quote);
     }

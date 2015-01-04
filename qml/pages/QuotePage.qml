@@ -41,7 +41,7 @@ Page {
 
             MenuItem {
                 text: qsTr("Search")
-                // onClicked: pageStack.push(Qt.resolvedUrl("SecondPage.qml"))
+                onClicked: pageStack.push(Qt.resolvedUrl("SearchPage.qml"))
             }
             MenuItem {
                 text: qsTr("Next quote")
@@ -64,7 +64,7 @@ Page {
             height: page.height
             spacing: Theme.paddingLarge
             PageHeader {
-                title: qsTr("Philosophy Quotes")
+                title: qsTr("Quote")
             }
             Column {
                 anchors.verticalCenter: parent.verticalCenter

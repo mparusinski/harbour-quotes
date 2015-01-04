@@ -34,7 +34,7 @@ Page {
             height: page.height
             spacing: Theme.paddingLarge
             PageHeader {
-                title: qsTr("About Philosophy Quotes")
+                title: qsTr("About")
             }
 
             Text {
@@ -45,7 +45,7 @@ Page {
                 width: parent.width
                 horizontalAlignment: Text.AlignJustify
                 wrapMode: Text.WordWrap
-                text: "\t<b>Philosophy Quote</b> helps you discover famous quotes from famous people."
+                text: "\t<b>Philosophy Quotes</b> helps you discover famous quotes from famous people."
                 color: Theme.primaryColor
                 font.pixelSize: Theme.fontSizeSmall
             }
@@ -68,7 +68,7 @@ Page {
                 width: parent.width
                 horizontalAlignment: Text.AlignJustify
                 wrapMode: Text.WordWrap
-                text: "\t<b>Philosophy Quote</b> is licensed under the terms of the General Public License version 2, the source code can be found on <a href=\"https://github.com/mparusinski/PhilosophyQuotes\">here</a>."
+                text: "\t<b>Philosophy Quotes</b> is licensed under the terms of the General Public License version 2, the source code can be found on <a href=\"https://github.com/mparusinski/PhilosophyQuotes\">here</a>."
                 color: Theme.primaryColor
                 onLinkActivated: Qt.openUrlExternally("https://github.com/mparusinski/PhilosophyQuotes")
                 font.pixelSize: Theme.fontSizeSmall

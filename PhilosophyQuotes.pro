@@ -29,7 +29,8 @@ OTHER_FILES += qml/PhilosophyQuotes.qml \
     qml/content/quotes_en.json \
     PhilosophyQuotes.desktop \
     qml/pages/AboutPage.qml \
-    qml/pages/QuotePage.qml
+    qml/pages/QuotePage.qml \
+    qml/pages/SearchPage.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

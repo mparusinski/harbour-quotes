@@ -4,7 +4,7 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <source>About Philosophy Quotes</source>
+        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -33,8 +33,11 @@
         <source>Hello Sailors</source>
         <translation type="obsolete">Hallo Matrosen</translation>
     </message>
+</context>
+<context>
+    <name>QuotePage</name>
     <message>
-        <source>Philosophy Quotes</source>
+        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -46,7 +49,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>About</source>
+        <source>Quote</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
