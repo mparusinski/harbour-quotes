@@ -19,7 +19,7 @@ import Sailfish.Silica 1.0
 
 Page {
     function quoteText() {
-        return "\t\"" + quoteController.getQuoteText() + "\"";
+        return quoteController.getQuoteText();
     }
 
     function philosopherText() {

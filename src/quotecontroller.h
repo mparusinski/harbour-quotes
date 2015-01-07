@@ -17,6 +17,7 @@
 #define QUOTECONTROLLER_H
 
 #include <QObject>
+#include <QQuickView>
 
 #include "quote.h"
 #include "quotedb.h"
@@ -24,12 +25,14 @@
 class QuoteController : public QObject
 {
     Q_OBJECT
-public:
-    explicit QuoteController(QObject *parent = 0);
+public:    
+    //explicit QuoteController(QObject *parent = 0);
 
-    Q_INVOKABLE QString getQuoteText() const;
+    explicit QuoteController(const QSharedPointer<QQuickView>& mainView, QObject* parent = 0);
 
-    Q_INVOKABLE QString getPhilosopherText() const;
+    Q_INVOKABLE QString getQuote() const;
+
+    Q_INVOKABLE QString getPhilosopher() const;
 
     Q_INVOKABLE void updateQuote();
 
@@ -39,7 +42,11 @@ public slots:
 
 private:
     QuoteDB m_quotesDB;
+    QSharedPointer<QQuickView> m_mainView;
     Quote::QuotePtr m_currentQuote;
+    QList<QObject*> m_searchQuoteModel;
+
+    void populateModel(const QString& searchString);
 
 };
 

@@ -15,20 +15,48 @@
 
 #include "quotecontroller.h"
 
-QuoteController::QuoteController(QObject *parent) :
+#include <QDebug>
+#include <QQmlContext>
+
+QuoteController::QuoteController(const QSharedPointer<QQuickView>& mainView, QObject * parent) :
     QObject(parent)
 {
+    m_mainView = mainView;
     m_currentQuote = m_quotesDB.nextQuote();
+    populateModel("");
 }
 
-QString QuoteController::getQuoteText() const {
-    return m_currentQuote->getQuoteText();
+QString QuoteController::getQuote() const {
+    return m_currentQuote->quote();
 }
 
-QString QuoteController::getPhilosopherText() const {
-    return m_currentQuote->getPhilosopher();
+QString QuoteController::getPhilosopher() const {
+    return m_currentQuote->philosopher();
 }
 
 void QuoteController::updateQuote()  {
     m_currentQuote = m_quotesDB.nextQuote();
+}
+
+void QuoteController::populateModel(const QString& searchString) {
+    QList<QObject*>::iterator clearIter;
+    for (clearIter = m_searchQuoteModel.begin(); clearIter != m_searchQuoteModel.end(); ++clearIter) {
+        QObject* elem = *clearIter;
+        delete elem;
+    }
+    m_searchQuoteModel.clear();
+    QList<Quote::QuotePtr>& quotes =  m_quotesDB.quotesList();
+    QList<Quote::QuotePtr>::iterator iter;
+    if (searchString == "") {
+        for (iter = quotes.begin(); iter != quotes.end(); ++iter) {
+            Quote::QuotePtr& currQuote = *iter;
+            Quote * quoteCopy = new Quote(currQuote->philosopher(), currQuote->quote());
+            m_searchQuoteModel.append(quoteCopy);
+        }
+        QQmlContext * rootCtx = m_mainView->rootContext();
+        rootCtx->setContextProperty("quoteModel", QVariant::fromValue(m_searchQuoteModel));
+    } else {
+        qWarning() << "POPULATING WITH CUSTOM SEARCH STRING NOT SUPPORTED";
+    }
+
 }

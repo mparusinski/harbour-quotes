@@ -20,16 +20,24 @@ Quote::Quote(QObject *parent) :
 {
 }
 
-Quote::Quote(QString philosopher, QString quoteText)
+Quote::Quote(const QString& philosopher, const QString& quote, QObject* parent) : QObject(parent)
 {
     m_philosopher = philosopher;
-    m_quoteText = quoteText;
+    m_quote = quote;
 }
 
-QString Quote::getPhilosopher() const {
+QString Quote::philosopher() const {
     return m_philosopher;
 }
 
-QString Quote::getQuoteText() const {
-    return m_quoteText;
+void Quote::setPhilosopher(const QString& philosopher) {
+    m_philosopher = philosopher;
+}
+
+QString Quote::quote() const {
+    return m_quote;
+}
+
+void Quote::setQuote(const QString& quote) {
+    m_quote = quote;
 }

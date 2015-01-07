@@ -23,24 +23,32 @@
 class Quote : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY(QString quote READ quote WRITE setQuote NOTIFY quoteChanged)
+    Q_PROPERTY(QString philosopher READ philosopher WRITE setPhilosopher NOTIFY philosopherChanged)
+
 public:
     typedef QSharedPointer<Quote> QuotePtr;
 
     explicit Quote(QObject *parent = 0);
 
-    Quote(QString philosopher, QString quoteText);
+    Quote(const QString& philosopher, const QString& quote, QObject* parent = 0);
 
-    QString getPhilosopher() const;
+    QString philosopher() const;
+    void setPhilosopher(const QString& philosopher);
 
-    QString getQuoteText() const;
+    QString quote() const;
+    void setQuote(const QString& quote);
 
 signals:
+    void quoteChanged();
+    void philosopherChanged();
 
 public slots:
 
 private:
     QString m_philosopher;
-    QString m_quoteText;
+    QString m_quote;
 
 };
 

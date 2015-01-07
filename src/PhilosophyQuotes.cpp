@@ -23,9 +23,9 @@
 int main(int argc, char *argv[])
 {
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
-    QScopedPointer<QQuickView> view(SailfishApp::createView());
+    QSharedPointer<QQuickView> view(SailfishApp::createView());
 
-    QuoteController quoteController;
+    QuoteController quoteController(view);
 
     view->rootContext()->setContextProperty("quoteController", &quoteController);
     view->setSource(SailfishApp::pathTo("qml/PhilosophyQuotes.qml"));

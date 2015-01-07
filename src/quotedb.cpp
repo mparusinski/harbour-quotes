@@ -85,3 +85,7 @@ bool QuoteDB::readQuotesFile(QUrl pathToFile) {
     quotesFile.close();
     return true;
 }
+
+QList<Quote::QuotePtr>& QuoteDB::quotesList() {
+    return m_quotes;
+}

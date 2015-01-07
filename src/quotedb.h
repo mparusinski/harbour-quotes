@@ -29,6 +29,8 @@ public:
 
     Quote::QuotePtr nextQuote();
 
+    QList<Quote::QuotePtr>& quotesList();
+
 signals:
 
 public slots:

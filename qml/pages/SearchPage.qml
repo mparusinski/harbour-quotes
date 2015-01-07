@@ -19,57 +19,46 @@ import Sailfish.Silica 1.0
 Page {
     id: page
 
-    Column {
-        id: searchFieldContainer
-        anchors.left: parent.left
-        anchors.right: parent.right
-
-        SearchField {
-            id: searchField
-            width: parent.width
-            placeholderText: "Search"
-
-            onTextChanged: {
-                listModel.update()
-            }
-        }
-    }
-
     SilicaListView {
+        id: listView
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        // anchors.fill: parent
-        anchors.top: searchFieldContainer.bottom
+        anchors.fill: parent
+        anchors.margins: Theme.paddingLarge
 
         // prevent newly added list delegates from stealing focus away from the search field
         currentIndex: -1
 
-        model: ListModel {
-            id: listModel
-            property var quotes: ["Nietzsche", "Proudhon", "Plato", "Descartes", "Sartre"]
-
-            function update() {
-                clear()
-                for (var i=0; i<quotes.length; i++) {
-                    if (searchField.text == "" || quotes[i].indexOf(searchField.text) >= 0) {
-                        append({"name": quotes[i]})
-                    }
-                }
-            }
-
-            Component.onCompleted: update()
-        }
-
         delegate: ListItem {
-            Label {
+            Text {
                 anchors {
                     left: parent.left
-                    leftMargin: searchField.textLeftMargin
-                    verticalCenter: parent.verticalCenter
+                    right: parent.right
                 }
-                text: name
+                color: Theme.secondaryHighlightColor
+                text: quote.substring(0, 30) + "..." + " - <i>" + philosopher + "</i>"
+                wrapMode: Text.WordWrap
+                font.pixelSize: Theme.fontSizeMedium
             }
         }
+
+        header: Column {
+            height: searchField.height
+            width: parent.width
+            anchors.margins: parent.margins
+            SearchField {
+                id: searchField
+                width: parent.width
+                placeholderText: "Search"
+
+    //            onTextChanged: {
+    //                listModel.update()
+    //            }
+            }
+        }
+
+        model: quoteModel
+
+        VerticalScrollDecorator { }
     }
 }
