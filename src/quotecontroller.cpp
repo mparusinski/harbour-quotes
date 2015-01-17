@@ -23,7 +23,8 @@ QuoteController::QuoteController(const QSharedPointer<QQuickView>& mainView, QOb
 {
     m_mainView = mainView;
     m_currentQuote = m_quotesDB.nextQuote();
-    populateModel("");
+    m_quoteModel = QuoteModelPtr(new QuoteModel);
+    populateModel();
 }
 
 QString QuoteController::getQuote() const {
@@ -38,25 +39,27 @@ void QuoteController::updateQuote()  {
     m_currentQuote = m_quotesDB.nextQuote();
 }
 
-void QuoteController::populateModel(const QString& searchString) {
-    QList<QObject*>::iterator clearIter;
-    for (clearIter = m_searchQuoteModel.begin(); clearIter != m_searchQuoteModel.end(); ++clearIter) {
-        QObject* elem = *clearIter;
-        delete elem;
-    }
-    m_searchQuoteModel.clear();
+void QuoteController::filterUsingSearchString(const QString& searchString) {
+    // perhaps do something smart like santization, creating a regexp, ...
+    m_quoteModel->clearModel();
     QList<Quote::QuotePtr>& quotes =  m_quotesDB.quotesList();
     QList<Quote::QuotePtr>::iterator iter;
-    if (searchString == "") {
-        for (iter = quotes.begin(); iter != quotes.end(); ++iter) {
-            Quote::QuotePtr& currQuote = *iter;
-            Quote * quoteCopy = new Quote(currQuote->philosopher(), currQuote->quote());
-            m_searchQuoteModel.append(quoteCopy);
+    for (iter = quotes.begin(); iter != quotes.end(); ++iter) {
+        Quote::QuotePtr& quote = *iter;
+        if (quote->philosopher().contains(searchString) || quote->quote().contains(searchString)) {
+            m_quoteModel->addQuote(quote);
         }
-        QQmlContext * rootCtx = m_mainView->rootContext();
-        rootCtx->setContextProperty("quoteModel", QVariant::fromValue(m_searchQuoteModel));
-    } else {
-        qWarning() << "POPULATING WITH CUSTOM SEARCH STRING NOT SUPPORTED";
     }
-
+    emit m_quoteModel->layoutChanged();
 }
+
+void QuoteController::populateModel() {
+    QList<Quote::QuotePtr>& quotes =  m_quotesDB.quotesList();
+    QList<Quote::QuotePtr>::iterator iter;
+    for (iter = quotes.begin(); iter != quotes.end(); ++iter) {
+        m_quoteModel->addQuote(*iter);
+    }
+    QQmlContext * rootCtx = m_mainView->rootContext();
+    rootCtx->setContextProperty("quoteModel", &(*m_quoteModel)); // I hate this hack
+}
+

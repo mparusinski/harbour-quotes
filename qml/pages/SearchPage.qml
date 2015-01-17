@@ -51,9 +51,9 @@ Page {
                 width: parent.width
                 placeholderText: "Search"
 
-    //            onTextChanged: {
-    //                listModel.update()
-    //            }
+                onTextChanged: {
+                    quoteController.filterUsingSearchString(text)
+                }
             }
         }
 

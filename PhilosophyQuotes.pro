@@ -17,7 +17,8 @@ CONFIG += sailfishapp
 SOURCES += src/PhilosophyQuotes.cpp \
     src/quotecontroller.cpp \
     src/quote.cpp \
-    src/quotedb.cpp
+    src/quotedb.cpp \
+    src/quotemodel.cpp
 
 OTHER_FILES += qml/PhilosophyQuotes.qml \
     qml/cover/CoverPage.qml \
@@ -40,6 +41,7 @@ TRANSLATIONS += translations/PhilosophyQuotes-de.ts
 HEADERS += \
     src/quotecontroller.h \
     src/quote.h \
-    src/quotedb.h
+    src/quotedb.h \
+    src/quotemodel.h
 
 

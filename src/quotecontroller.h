@@ -21,11 +21,14 @@
 
 #include "quote.h"
 #include "quotedb.h"
+#include "quotemodel.h"
 
 class QuoteController : public QObject
 {
     Q_OBJECT
-public:    
+public:
+    typedef QSharedPointer<QuoteModel> QuoteModelPtr;
+
     //explicit QuoteController(QObject *parent = 0);
 
     explicit QuoteController(const QSharedPointer<QQuickView>& mainView, QObject* parent = 0);
@@ -36,6 +39,8 @@ public:
 
     Q_INVOKABLE void updateQuote();
 
+    Q_INVOKABLE void filterUsingSearchString(const QString& searchString);
+
 signals:
 
 public slots:
@@ -44,9 +49,9 @@ private:
     QuoteDB m_quotesDB;
     QSharedPointer<QQuickView> m_mainView;
     Quote::QuotePtr m_currentQuote;
-    QList<QObject*> m_searchQuoteModel;
+    QuoteModelPtr m_quoteModel;
 
-    void populateModel(const QString& searchString);
+    void populateModel();
 
 };
 
