@@ -15,15 +15,47 @@ QuoteModel::~QuoteModel()
 
 }
 
-void QuoteModel::addQuote(const Quote::QuotePtr& quote)
-{
-    m_quotes.append(quote);
-    m_quoteNum++;
+void QuoteModel::populateModel(const QList<Quote::QuotePtr>& quotes) {
+    int previousSize = m_quoteNum;
+    beginRemoveRows(QModelIndex(), 0, previousSize - 1);
+    m_quotes.clear();
+    m_quoteNum = 0;
+    endRemoveRows();
+
+    int newSize = quotes.size();
+    beginInsertRows(QModelIndex(), 0, newSize - 1);
+    QListIterator<Quote::QuotePtr> iter(quotes);
+    while (iter.hasNext()) {
+        Quote::QuotePtr elem = iter.next();
+        m_quotes.append(elem);
+    }
+    m_quoteNum = newSize;
+    endInsertRows();
 }
 
 void QuoteModel::clearModel() {
+    int previousSize = m_quoteNum;
+    beginRemoveRows(QModelIndex(), 0, previousSize - 1);
     m_quotes.clear();
     m_quoteNum = 0;
+    endRemoveRows();
+}
+
+void QuoteModel::filterUsing(const QString& searchString) {
+    int index = -1;
+    QMutableListIterator<Quote::QuotePtr> iter(m_quotes);
+    while (iter.hasNext()) {
+        Quote::QuotePtr elem = iter.next();
+        index++;
+        const QString & philosopher = elem->philosopher();
+        const QString & quote = elem->quote();
+        if (!(philosopher.contains(searchString, Qt::CaseInsensitive) || quote.contains(searchString, Qt::CaseInsensitive))) {
+            beginRemoveRows(QModelIndex(), index, index);
+            iter.remove();
+            m_quoteNum--;
+            endRemoveRows();
+        }
+    }
 }
 
 int QuoteModel::rowCount(const QModelIndex &parent) const

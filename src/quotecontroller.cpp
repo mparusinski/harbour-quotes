@@ -24,6 +24,7 @@ QuoteController::QuoteController(const QSharedPointer<QQuickView>& mainView, QOb
     m_mainView = mainView;
     m_currentQuote = m_quotesDB.nextQuote();
     m_quoteModel = QuoteModelPtr(new QuoteModel);
+    m_previousSearchString = "";
     populateModel();
 }
 
@@ -41,25 +42,28 @@ void QuoteController::updateQuote()  {
 
 void QuoteController::filterUsingSearchString(const QString& searchString) {
     // perhaps do something smart like santization, creating a regexp, ...
-    m_quoteModel->clearModel();
-    QList<Quote::QuotePtr>& quotes =  m_quotesDB.quotesList();
-    QList<Quote::QuotePtr>::iterator iter;
-    for (iter = quotes.begin(); iter != quotes.end(); ++iter) {
-        Quote::QuotePtr& quote = *iter;
-        if (quote->philosopher().contains(searchString) || quote->quote().contains(searchString)) {
-            m_quoteModel->addQuote(quote);
-        }
+    const QString trimmedSearchString = searchString.trimmed();
+
+    if (trimmedSearchString == m_previousSearchString) {
+        return;
     }
-    emit m_quoteModel->layoutChanged();
+
+    if (trimmedSearchString == "") {
+        m_quoteModel->populateModel(m_quotesDB.quotesList());
+        m_previousSearchString = trimmedSearchString;
+    } else {
+        if (m_previousSearchString.length() > trimmedSearchString.length()) {
+            m_quoteModel->populateModel(m_quotesDB.quotesList());
+        }
+        m_quoteModel->filterUsing(trimmedSearchString);
+        m_previousSearchString = trimmedSearchString;
+    }
 }
 
 void QuoteController::populateModel() {
-    QList<Quote::QuotePtr>& quotes =  m_quotesDB.quotesList();
-    QList<Quote::QuotePtr>::iterator iter;
-    for (iter = quotes.begin(); iter != quotes.end(); ++iter) {
-        m_quoteModel->addQuote(*iter);
-    }
     QQmlContext * rootCtx = m_mainView->rootContext();
     rootCtx->setContextProperty("quoteModel", &(*m_quoteModel)); // I hate this hack
+    const QList<Quote::QuotePtr>& quotes =  m_quotesDB.quotesList();
+    m_quoteModel->populateModel(quotes);
 }
 

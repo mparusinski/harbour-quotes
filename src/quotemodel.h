@@ -20,9 +20,11 @@ public:
 
     virtual ~QuoteModel();
 
-    void addQuote(const Quote::QuotePtr& quote);
+    void populateModel(const QList<Quote::QuotePtr>& quotes);
 
     void clearModel();
+
+    void filterUsing(const QString& searchString);
 
     virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
 

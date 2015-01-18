@@ -50,6 +50,7 @@ private:
     QSharedPointer<QQuickView> m_mainView;
     Quote::QuotePtr m_currentQuote;
     QuoteModelPtr m_quoteModel;
+    QString m_previousSearchString;
 
     void populateModel();
 
