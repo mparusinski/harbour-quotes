@@ -42,21 +42,21 @@ void QuoteModel::clearModel() {
 }
 
 void QuoteModel::filterUsing(const QString& searchString) {
-//    int index = -1;
-//    QuoteDB::ContainerMutableIteratorType iter(m_quotesDB);
-//    while (iter.hasNext()) {
-//        iter.next();
-//        const Quote::QuotePtr& elem = iter.value();
-//        index++;
-//        const QString & philosopher = elem->philosopher();
-//        const QString & quote = elem->quote();
-//        if (!(philosopher.contains(searchString, Qt::CaseInsensitive) || quote.contains(searchString, Qt::CaseInsensitive))) {
-//            beginRemoveRows(QModelIndex(), index, index);
-//            iter.remove();
-//            m_quoteNum--;
-//            endRemoveRows();
-//        }
-//    }
+    int index = -1;
+    QMutableListIterator<Quote::QuotePtr> iter(m_quotesVisible);
+    while (iter.hasNext()) {
+        iter.next();
+        const Quote::QuotePtr& elem = iter.value();
+        index++;
+        const QString & philosopher = elem->philosopher();
+        const QString & quote = elem->quote();
+        if (!(philosopher.contains(searchString, Qt::CaseInsensitive) || quote.contains(searchString, Qt::CaseInsensitive))) {
+            beginRemoveRows(QModelIndex(), index, index);
+            iter.remove();
+            m_quoteNum--;
+            endRemoveRows();
+        }
+    }
 }
 
 int QuoteModel::rowCount(const QModelIndex &parent) const

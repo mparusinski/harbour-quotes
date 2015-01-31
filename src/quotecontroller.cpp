@@ -41,17 +41,9 @@ void QuoteController::updateQuote()  {
 }
 
 void QuoteController::filterUsingSearchString(const QString& searchString) {
-    // perhaps do something smart like santization, creating a regexp, ...
-//    QString trimmedSearchString = searchString.trimmed();
-
-//    if (m_previousSearchString != trimmedSearchString) { // skip if the same
-//        if (trimmedSearchString == "") { // revert to default
-//            m_quoteModel->populateModel(m_quotesDB.quotesList());
-//        } else {
-//            m_quoteModel->filterUsing(trimmedSearchString);
-//        }
-//        m_previousSearchString = trimmedSearchString;
-//    }
+    // dead stupid
+    m_quoteModel->repopulateQuotes();
+    m_quoteModel->filterUsing(searchString);
 }
 
 void QuoteController::populateModel() {
