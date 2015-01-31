@@ -17,7 +17,7 @@
 #define QUOTEDB_H
 
 #include <QObject>
-#include <QList>
+#include <QMap>
 
 #include "quote.h"
 
@@ -25,21 +25,27 @@ class QuoteDB : public QObject
 {
     Q_OBJECT
 public:
-    explicit QuoteDB(QObject *parent = 0);
+    typedef QMap<QString, Quote::QuotePtr> ContainerType;
+    typedef QMapIterator<QString, Quote::QuotePtr> ContainerIteratorType;
+    typedef QMutableMapIterator<QString, Quote::QuotePtr> ContainerMutableIteratorType;
 
     Quote::QuotePtr nextQuote();
 
-    QList<Quote::QuotePtr>& quotesList();
+    ContainerType& getQuotes();
+
+    static QuoteDB* getQuoteDB();
 
 signals:
 
 public slots:
 
 private:
-    typedef QList<Quote::QuotePtr> ContainerType;
     ContainerType m_quotes;
     bool m_visitorSet;
     ContainerType::ConstIterator m_visitorIterator;
+    static QuoteDB * instance;
+
+    QuoteDB(QObject *parent = 0);
 
     bool readQuotesFile(QUrl pathToFile);
 };

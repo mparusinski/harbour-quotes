@@ -46,7 +46,6 @@ signals:
 public slots:
 
 private:
-    QuoteDB m_quotesDB;
     QSharedPointer<QQuickView> m_mainView;
     Quote::QuotePtr m_currentQuote;
     QuoteModelPtr m_quoteModel;

@@ -2,8 +2,10 @@
 #define QUOTEMODEL_H
 
 #include "quote.h"
+#include "quotedb.h"
 
 #include <QAbstractListModel>
+#include <QList>
 #include <QModelIndex>
 
 class QuoteModel : public QAbstractListModel
@@ -16,13 +18,11 @@ public:
         PhilosopherRole
     };
 
-    explicit QuoteModel(QObject *parent = 0);
-
     virtual ~QuoteModel();
 
-    void populateModel(const QList<Quote::QuotePtr>& quotes);
+    explicit QuoteModel(QObject *parent = 0);
 
-    void clearModel();
+    void repopulateQuotes();
 
     void filterUsing(const QString& searchString);
 
@@ -33,8 +33,10 @@ public:
     virtual QHash<int, QByteArray> roleNames() const;
 
 private:
+    void clearModel();
+
     QHash<int, QByteArray> m_roles;
-    QList<Quote::QuotePtr> m_quotes;
+    QList<Quote::QuotePtr> m_quotesVisible;
     int m_quoteNum;
 
 };

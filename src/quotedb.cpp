@@ -23,14 +23,25 @@
 #include <QStringList>
 #include <QDir>
 
+QuoteDB * QuoteDB::instance = NULL;
+
 QuoteDB::QuoteDB(QObject *parent) :
     QObject(parent)
 {
     if (!readQuotesFile(SailfishApp::pathTo("qml/content/quotes_en.json"))) {
         Quote::QuotePtr emptyQuote = Quote::QuotePtr(new Quote("Quote missing", "No philosopher"));
-        m_quotes.push_back(emptyQuote);
+        m_quotes.insert("", emptyQuote);
     }
     m_visitorSet = false;
+}
+
+QuoteDB * QuoteDB::getQuoteDB()
+{
+    if (instance == NULL) {
+        instance = new QuoteDB;
+    }
+
+    return instance;
 }
 
 Quote::QuotePtr QuoteDB::nextQuote() {
@@ -79,13 +90,13 @@ bool QuoteDB::readQuotesFile(QUrl pathToFile) {
         QString philosopher = jsonQuoteObj["philosopher"].toString();
 
         Quote::QuotePtr quote(new Quote(philosopher, quoteText));
-        m_quotes.push_back(quote);
+        m_quotes.insert(quoteText, quote); // some way to guarantee sortedness
     }
 
     quotesFile.close();
     return true;
 }
 
-QList<Quote::QuotePtr>& QuoteDB::quotesList() {
+QuoteDB::ContainerType& QuoteDB::getQuotes() {
     return m_quotes;
 }

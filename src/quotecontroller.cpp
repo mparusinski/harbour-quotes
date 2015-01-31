@@ -22,9 +22,9 @@ QuoteController::QuoteController(const QSharedPointer<QQuickView>& mainView, QOb
     QObject(parent)
 {
     m_mainView = mainView;
-    m_currentQuote = m_quotesDB.nextQuote();
-    m_quoteModel = QuoteModelPtr(new QuoteModel);
+    m_currentQuote = QuoteDB::getQuoteDB()->nextQuote();
     m_previousSearchString = "";
+    m_quoteModel = QuoteModelPtr(new QuoteModel());
     populateModel();
 }
 
@@ -37,33 +37,26 @@ QString QuoteController::getPhilosopher() const {
 }
 
 void QuoteController::updateQuote()  {
-    m_currentQuote = m_quotesDB.nextQuote();
+    m_currentQuote = QuoteDB::getQuoteDB()->nextQuote();
 }
 
 void QuoteController::filterUsingSearchString(const QString& searchString) {
     // perhaps do something smart like santization, creating a regexp, ...
-    const QString trimmedSearchString = searchString.trimmed();
+//    QString trimmedSearchString = searchString.trimmed();
 
-    if (trimmedSearchString == m_previousSearchString) {
-        return;
-    }
-
-    if (trimmedSearchString == "") {
-        m_quoteModel->populateModel(m_quotesDB.quotesList());
-        m_previousSearchString = trimmedSearchString;
-    } else {
-        if (m_previousSearchString.length() > trimmedSearchString.length()) {
-            m_quoteModel->populateModel(m_quotesDB.quotesList());
-        }
-        m_quoteModel->filterUsing(trimmedSearchString);
-        m_previousSearchString = trimmedSearchString;
-    }
+//    if (m_previousSearchString != trimmedSearchString) { // skip if the same
+//        if (trimmedSearchString == "") { // revert to default
+//            m_quoteModel->populateModel(m_quotesDB.quotesList());
+//        } else {
+//            m_quoteModel->filterUsing(trimmedSearchString);
+//        }
+//        m_previousSearchString = trimmedSearchString;
+//    }
 }
 
 void QuoteController::populateModel() {
     QQmlContext * rootCtx = m_mainView->rootContext();
     rootCtx->setContextProperty("quoteModel", &(*m_quoteModel)); // I hate this hack
-    const QList<Quote::QuotePtr>& quotes =  m_quotesDB.quotesList();
-    m_quoteModel->populateModel(quotes);
+    m_quoteModel->repopulateQuotes();
 }
 

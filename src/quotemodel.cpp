@@ -15,47 +15,48 @@ QuoteModel::~QuoteModel()
 
 }
 
-void QuoteModel::populateModel(const QList<Quote::QuotePtr>& quotes) {
-    int previousSize = m_quoteNum;
-    beginRemoveRows(QModelIndex(), 0, previousSize - 1);
-    m_quotes.clear();
-    m_quoteNum = 0;
-    endRemoveRows();
-
+void QuoteModel::repopulateQuotes() {
+    clearModel();
+    QuoteDB* quoteDB = QuoteDB::getQuoteDB();
+    QuoteDB::ContainerType quotes = quoteDB->getQuotes();
     int newSize = quotes.size();
     beginInsertRows(QModelIndex(), 0, newSize - 1);
-    QListIterator<Quote::QuotePtr> iter(quotes);
+    QuoteDB::ContainerIteratorType iter(quotes);
     while (iter.hasNext()) {
-        Quote::QuotePtr elem = iter.next();
-        m_quotes.append(elem);
+        iter.next();
+        m_quotesVisible.append(iter.value());
     }
     m_quoteNum = newSize;
     endInsertRows();
 }
 
+void filterUsing(const QString& searchString);
+
 void QuoteModel::clearModel() {
-    int previousSize = m_quoteNum;
-    beginRemoveRows(QModelIndex(), 0, previousSize - 1);
-    m_quotes.clear();
-    m_quoteNum = 0;
-    endRemoveRows();
+    if (m_quoteNum > 0) {
+        beginRemoveRows(QModelIndex(), 0, m_quoteNum - 1);
+        m_quotesVisible.clear();
+        m_quoteNum = 0;
+        endRemoveRows();
+    }
 }
 
 void QuoteModel::filterUsing(const QString& searchString) {
-    int index = -1;
-    QMutableListIterator<Quote::QuotePtr> iter(m_quotes);
-    while (iter.hasNext()) {
-        Quote::QuotePtr elem = iter.next();
-        index++;
-        const QString & philosopher = elem->philosopher();
-        const QString & quote = elem->quote();
-        if (!(philosopher.contains(searchString, Qt::CaseInsensitive) || quote.contains(searchString, Qt::CaseInsensitive))) {
-            beginRemoveRows(QModelIndex(), index, index);
-            iter.remove();
-            m_quoteNum--;
-            endRemoveRows();
-        }
-    }
+//    int index = -1;
+//    QuoteDB::ContainerMutableIteratorType iter(m_quotesDB);
+//    while (iter.hasNext()) {
+//        iter.next();
+//        const Quote::QuotePtr& elem = iter.value();
+//        index++;
+//        const QString & philosopher = elem->philosopher();
+//        const QString & quote = elem->quote();
+//        if (!(philosopher.contains(searchString, Qt::CaseInsensitive) || quote.contains(searchString, Qt::CaseInsensitive))) {
+//            beginRemoveRows(QModelIndex(), index, index);
+//            iter.remove();
+//            m_quoteNum--;
+//            endRemoveRows();
+//        }
+//    }
 }
 
 int QuoteModel::rowCount(const QModelIndex &parent) const
@@ -67,9 +68,9 @@ QVariant QuoteModel::data(const QModelIndex &index, int role) const
 {
     int rowNum = index.row();
     if (role == QuoteRole) {
-        return QVariant::fromValue(m_quotes[rowNum]->quote());
+        return QVariant::fromValue(m_quotesVisible[rowNum]->quote());
     } else if (role == PhilosopherRole) {
-        return QVariant::fromValue(m_quotes[rowNum]->philosopher());
+        return QVariant::fromValue(m_quotesVisible[rowNum]->philosopher());
     } else {
         qWarning() << "UI is trying to access unknown or unsupported property of quote";
         return QVariant();
