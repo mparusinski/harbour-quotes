@@ -19,11 +19,11 @@ import Sailfish.Silica 1.0
 
 Page {
     function quoteText() {
-        return quoteController.getQuoteText();
+        return quoteController.getQuote();
     }
 
     function philosopherText() {
-        return "<i>" + quoteController.getPhilosopherText() + "</i>"
+        return "<i>" + quoteController.getPhilosopher() + "</i>"
     }
 
     id: page
@@ -39,10 +39,10 @@ Page {
                 onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
             }
 
-            MenuItem {
-                text: qsTr("Search")
-                onClicked: pageStack.push(Qt.resolvedUrl("SearchPage.qml"))
-            }
+//            MenuItem {
+//                text: qsTr("Search")
+//                onClicked: pageStack.push(Qt.resolvedUrl("SearchPage.qml"))
+//            }
             MenuItem {
                 text: qsTr("Next quote")
                 onClicked: {

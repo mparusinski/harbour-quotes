@@ -31,6 +31,7 @@ QuoteDB::QuoteDB(QObject *parent) :
     if (!readQuotesFile(SailfishApp::pathTo("qml/content/quotes_en.json"))) {
         Quote::QuotePtr emptyQuote = Quote::QuotePtr(new Quote("Quote missing", "No philosopher"));
         m_quotes.insert("", emptyQuote);
+        m_quotesByIDs.insert(emptyQuote->uniqueID(), emptyQuote);
     }
     m_visitorSet = false;
 }
@@ -91,6 +92,7 @@ bool QuoteDB::readQuotesFile(QUrl pathToFile) {
 
         Quote::QuotePtr quote(new Quote(philosopher, quoteText));
         m_quotes.insert(quoteText, quote); // some way to guarantee sortedness
+        m_quotesByIDs.insert(quote->uniqueID(), quote);
     }
 
     quotesFile.close();
@@ -99,4 +101,13 @@ bool QuoteDB::readQuotesFile(QUrl pathToFile) {
 
 QuoteDB::ContainerType& QuoteDB::getQuotes() {
     return m_quotes;
+}
+
+Quote::QuotePtr QuoteDB::getQuoteWithID(u_int32_t id) {
+    QMap<u_int32_t, Quote::QuotePtr>::const_iterator iter = m_quotesByIDs.find(id);
+    if (iter != m_quotesByIDs.end()) {
+        return iter.value();
+    } else {
+        return Quote::QuotePtr();
+    }
 }

@@ -15,7 +15,8 @@ class QuoteModel : public QAbstractListModel
 public:
     enum QuoteRoles {
         QuoteRole = Qt::UserRole + 1,
-        PhilosopherRole
+        PhilosopherRole,
+        QuoteIDRole
     };
 
     virtual ~QuoteModel();

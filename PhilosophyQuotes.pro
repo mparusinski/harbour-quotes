@@ -18,7 +18,8 @@ SOURCES += src/PhilosophyQuotes.cpp \
     src/quotecontroller.cpp \
     src/quote.cpp \
     src/quotedb.cpp \
-    src/quotemodel.cpp
+    src/quotemodel.cpp \
+    src/idregistry.cpp
 
 OTHER_FILES += qml/PhilosophyQuotes.qml \
     qml/cover/CoverPage.qml \
@@ -42,6 +43,7 @@ HEADERS += \
     src/quotecontroller.h \
     src/quote.h \
     src/quotedb.h \
-    src/quotemodel.h
+    src/quotemodel.h \
+    src/idregistry.h
 
 

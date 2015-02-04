@@ -29,9 +29,9 @@ class QuoteController : public QObject
 public:
     typedef QSharedPointer<QuoteModel> QuoteModelPtr;
 
-    //explicit QuoteController(QObject *parent = 0);
-
     explicit QuoteController(const QSharedPointer<QQuickView>& mainView, QObject* parent = 0);
+
+    Q_INVOKABLE void loadQuote(const QString& quoteID);
 
     Q_INVOKABLE QString getQuote() const;
 

@@ -52,3 +52,7 @@ void QuoteController::populateModel() {
     m_quoteModel->repopulateQuotes();
 }
 
+void QuoteController::loadQuote(const QString& quoteID) {
+    u_int32_t realQuoteID = static_cast<u_int32_t>(quoteID.toLongLong());
+    m_currentQuote = QuoteDB::getQuoteDB()->getQuoteWithID(realQuoteID);
+}

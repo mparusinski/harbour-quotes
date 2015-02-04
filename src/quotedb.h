@@ -35,6 +35,8 @@ public:
 
     static QuoteDB* getQuoteDB();
 
+    Quote::QuotePtr getQuoteWithID(u_int32_t id);
+
 signals:
 
 public slots:
@@ -43,6 +45,7 @@ private:
     ContainerType m_quotes;
     bool m_visitorSet;
     ContainerType::ConstIterator m_visitorIterator;
+    QMap<u_int32_t, Quote::QuotePtr> m_quotesByIDs;
     static QuoteDB * instance;
 
     QuoteDB(QObject *parent = 0);

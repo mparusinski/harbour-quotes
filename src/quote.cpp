@@ -24,6 +24,7 @@ Quote::Quote(const QString& philosopher, const QString& quote, QObject* parent) 
 {
     m_philosopher = philosopher;
     m_quote = quote;
+    m_uniqueID = IDRegistry::getRegistry()->getNextID();
 }
 
 QString Quote::philosopher() const {
@@ -40,4 +41,8 @@ QString Quote::quote() const {
 
 void Quote::setQuote(const QString& quote) {
     m_quote = quote;
+}
+
+u_int32_t Quote::uniqueID() const {
+    return m_uniqueID;
 }

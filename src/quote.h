@@ -20,6 +20,8 @@
 #include <QString>
 #include <QSharedPointer>
 
+#include "idregistry.h"
+
 class Quote : public QObject
 {
     Q_OBJECT
@@ -40,6 +42,8 @@ public:
     QString quote() const;
     void setQuote(const QString& quote);
 
+    u_int32_t uniqueID() const;
+
 signals:
     void quoteChanged();
     void philosopherChanged();
@@ -49,6 +53,7 @@ public slots:
 private:
     QString m_philosopher;
     QString m_quote;
+    u_int32_t m_uniqueID;
 
 };
 

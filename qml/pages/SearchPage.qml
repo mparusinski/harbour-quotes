@@ -20,6 +20,13 @@ Page {
     id: page
 
     SilicaListView {
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("About")
+                onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
+            }
+        }
+
         id: listView
         anchors.left: parent.left
         anchors.right: parent.right
@@ -39,6 +46,14 @@ Page {
                 text: quote.substring(0, 30) + "..." + " - <i>" + philosopher + "</i>"
                 wrapMode: Text.WordWrap
                 font.pixelSize: Theme.fontSizeMedium
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        quoteController.loadQuote(quoteID);
+                        pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
+                    }
+                }
             }
         }
 

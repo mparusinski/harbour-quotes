@@ -7,6 +7,7 @@ QuoteModel::QuoteModel(QObject *parent)
 {
    m_roles[QuoteRole] = "quote";
    m_roles[PhilosopherRole] = "philosopher";
+   m_roles[QuoteIDRole] = "quoteID";
    m_quoteNum = 0;
 }
 
@@ -71,6 +72,9 @@ QVariant QuoteModel::data(const QModelIndex &index, int role) const
         return QVariant::fromValue(m_quotesVisible[rowNum]->quote());
     } else if (role == PhilosopherRole) {
         return QVariant::fromValue(m_quotesVisible[rowNum]->philosopher());
+    } else if (role == QuoteIDRole) {
+        u_int32_t quoteID = m_quotesVisible[rowNum]->uniqueID();
+        return QVariant::fromValue(QString::number(quoteID));
     } else {
         qWarning() << "UI is trying to access unknown or unsupported property of quote";
         return QVariant();
