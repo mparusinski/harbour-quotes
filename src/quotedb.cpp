@@ -45,22 +45,6 @@ QuoteDB * QuoteDB::getQuoteDB()
     return instance;
 }
 
-Quote::QuotePtr QuoteDB::nextQuote() {
-    if (!m_visitorSet) {
-        m_visitorIterator = m_quotes.begin();
-        m_visitorSet = true;
-    }
-
-    if (m_visitorIterator == m_quotes.end()) {
-        // restarting from beginning
-        m_visitorIterator = m_quotes.begin();
-    }
-
-    Quote::QuotePtr elem = *m_visitorIterator;
-    m_visitorIterator++;
-    return elem;
-}
-
 bool QuoteDB::readQuotesFile(QUrl pathToFile) {
     QString localFile = pathToFile.toLocalFile();
     QFile quotesFile(localFile);

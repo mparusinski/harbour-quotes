@@ -22,7 +22,6 @@ QuoteController::QuoteController(const QSharedPointer<QQuickView>& mainView, QOb
     QObject(parent)
 {
     m_mainView = mainView;
-    m_currentQuote = QuoteDB::getQuoteDB()->nextQuote();
     m_previousSearchString = "";
     m_quoteModel = QuoteModelPtr(new QuoteModel());
     populateModel();
@@ -36,8 +35,22 @@ QString QuoteController::getPhilosopher() const {
     return m_currentQuote->philosopher();
 }
 
-void QuoteController::updateQuote()  {
-    m_currentQuote = QuoteDB::getQuoteDB()->nextQuote();
+void QuoteController::nextQuote()  {
+    if (m_modelIterator->hasNext()) {
+        m_currentQuote = m_modelIterator->next();
+    } else {
+        m_modelIterator->toFront();
+        m_currentQuote = m_modelIterator->next();
+    }
+}
+
+void QuoteController::prevQuote()  {
+    if (m_modelIterator->hasPrevious()) {
+        m_currentQuote = m_modelIterator->previous();
+    } else {
+        m_modelIterator->toBack();
+        m_currentQuote = m_modelIterator->previous();
+    }
 }
 
 void QuoteController::filterUsingSearchString(const QString& searchString) {
@@ -55,4 +68,5 @@ void QuoteController::populateModel() {
 void QuoteController::loadQuote(const QString& quoteID) {
     u_int32_t realQuoteID = static_cast<u_int32_t>(quoteID.toLongLong());
     m_currentQuote = QuoteDB::getQuoteDB()->getQuoteWithID(realQuoteID);
+    m_modelIterator = m_quoteModel->getIterToQuote(realQuoteID);
 }

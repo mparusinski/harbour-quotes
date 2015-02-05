@@ -19,7 +19,7 @@ import Sailfish.Silica 1.0
 
 Page {
     function quoteText() {
-        return quoteController.getQuote();
+        return "\t" + quoteController.getQuote();
     }
 
     function philosopherText() {
@@ -39,14 +39,19 @@ Page {
                 onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
             }
 
-//            MenuItem {
-//                text: qsTr("Search")
-//                onClicked: pageStack.push(Qt.resolvedUrl("SearchPage.qml"))
-//            }
+            MenuItem {
+                text: qsTr("Previous quote")
+                onClicked: {
+                    quoteController.prevQuote()
+                    quoteField.text = quoteText()
+                    philosopherField.text = philosopherText()
+                }
+            }
+
             MenuItem {
                 text: qsTr("Next quote")
                 onClicked: {
-                    quoteController.updateQuote()
+                    quoteController.nextQuote()
                     quoteField.text = quoteText()
                     philosopherField.text = philosopherText()
                 }
@@ -79,7 +84,6 @@ Page {
                     width: parent.width
                     horizontalAlignment: Text.AlignJustify
                     wrapMode: Text.WordWrap
-//                    text: "\t\"That which does not kill you makes you stronger\""
                     text: quoteText()
                     color: Theme.primaryColor
                     font.pixelSize: Theme.fontSizeLarge
@@ -92,7 +96,6 @@ Page {
                     width: parent.width
                     horizontalAlignment: Text.AlignRight
                     wrapMode: Text.WordWrap
-//                    text: "<i>Frederich Nietszche</i>"
                     text: philosopherText()
                     color: Theme.secondaryHighlightColor
                     font.pixelSize: Theme.fontSizeMedium

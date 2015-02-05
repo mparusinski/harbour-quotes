@@ -29,8 +29,6 @@ public:
     typedef QMapIterator<QString, Quote::QuotePtr> ContainerIteratorType;
     typedef QMutableMapIterator<QString, Quote::QuotePtr> ContainerMutableIteratorType;
 
-    Quote::QuotePtr nextQuote();
-
     ContainerType& getQuotes();
 
     static QuoteDB* getQuoteDB();

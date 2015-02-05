@@ -48,6 +48,10 @@
         <source>Quote</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Previous quote</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SearchPage</name>

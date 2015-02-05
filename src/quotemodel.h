@@ -6,6 +6,7 @@
 
 #include <QAbstractListModel>
 #include <QList>
+#include <QMap>
 #include <QModelIndex>
 
 class QuoteModel : public QAbstractListModel
@@ -13,6 +14,8 @@ class QuoteModel : public QAbstractListModel
     Q_OBJECT
 
 public:
+    typedef QSharedPointer< QListIterator<Quote::QuotePtr> > ModelIteratorPtr;
+
     enum QuoteRoles {
         QuoteRole = Qt::UserRole + 1,
         PhilosopherRole,
@@ -26,6 +29,8 @@ public:
     void repopulateQuotes();
 
     void filterUsing(const QString& searchString);
+
+    ModelIteratorPtr getIterToQuote(u_int32_t quoteID) const;
 
     virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
 

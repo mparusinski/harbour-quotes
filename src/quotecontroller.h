@@ -37,7 +37,9 @@ public:
 
     Q_INVOKABLE QString getPhilosopher() const;
 
-    Q_INVOKABLE void updateQuote();
+    Q_INVOKABLE void nextQuote();
+
+    Q_INVOKABLE void prevQuote();
 
     Q_INVOKABLE void filterUsingSearchString(const QString& searchString);
 
@@ -50,6 +52,7 @@ private:
     Quote::QuotePtr m_currentQuote;
     QuoteModelPtr m_quoteModel;
     QString m_previousSearchString;
+    QuoteModel::ModelIteratorPtr m_modelIterator;
 
     void populateModel();
 

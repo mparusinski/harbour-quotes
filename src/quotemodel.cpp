@@ -31,7 +31,15 @@ void QuoteModel::repopulateQuotes() {
     endInsertRows();
 }
 
-void filterUsing(const QString& searchString);
+QuoteModel::ModelIteratorPtr QuoteModel::getIterToQuote(u_int32_t quoteID) const {
+    ModelIteratorPtr modelIterator(new QListIterator<Quote::QuotePtr>(m_quotesVisible));
+    while (modelIterator->hasNext()) {
+        const Quote::QuotePtr& quote = modelIterator->next();
+        if (quote->uniqueID() == quoteID) {
+            return modelIterator;
+        }
+    }
+}
 
 void QuoteModel::clearModel() {
     if (m_quoteNum > 0) {
