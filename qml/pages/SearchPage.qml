@@ -36,17 +36,34 @@ Page {
         // prevent newly added list delegates from stealing focus away from the search field
         currentIndex: -1
 
-        delegate: ListItem {
+        delegate: Column {
+            height: 120
+            width: parent.width
+            anchors.margins: parent.margins
             Text {
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                }
-                color: Theme.secondaryHighlightColor
-                text: quote.substring(0, 30) + "..." + " - <i>" + philosopher + "</i>"
-                wrapMode: Text.WordWrap
+                id: quoteText
+                color: Theme.primaryColor
+                width: parent.width
+                anchors.top: parent.top
+                text: "<p>" + quote + "...</p>"
                 font.pixelSize: Theme.fontSizeMedium
-
+                clip: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        quoteController.loadQuote(quoteID);
+                        pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
+                    }
+                }
+            }
+            Text {
+                id: philosopherText
+                width: parent.width
+                anchors.verticalCenter: quoteText.bottom
+                horizontalAlignment: Text.AlignRight
+                color: Theme.secondaryHighlightColor
+                text: "<i>" + philosopher + "</i>"
+                font.pixelSize: Theme.fontSizeSmall
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {

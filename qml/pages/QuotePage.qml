@@ -102,5 +102,7 @@ Page {
                 }
             }
         }
+
+        VerticalScrollDecorator { }
     }
 }
