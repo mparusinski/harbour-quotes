@@ -51,6 +51,16 @@ void QuoteModel::clearModel() {
 }
 
 void QuoteModel::filterUsing(const QString& searchString) {
+    QStringList tokens = searchString.split(" ", QString::SkipEmptyParts);
+
+    QListIterator<QString> iter(tokens);
+    while (iter.hasNext()) {
+        QString currentToken = iter.next();
+        filterUsingToken(currentToken);
+    }
+}
+
+void QuoteModel::filterUsingToken(const QString& tokenString) {
     int index = -1;
     QMutableListIterator<Quote::QuotePtr> iter(m_quotesVisible);
     while (iter.hasNext()) {
@@ -59,7 +69,7 @@ void QuoteModel::filterUsing(const QString& searchString) {
         index++;
         const QString & philosopher = elem->philosopher();
         const QString & quote = elem->quote();
-        if (!(philosopher.contains(searchString, Qt::CaseInsensitive) || quote.contains(searchString, Qt::CaseInsensitive))) {
+        if (!(philosopher.contains(tokenString, Qt::CaseInsensitive) || quote.contains(tokenString, Qt::CaseInsensitive))) {
             beginRemoveRows(QModelIndex(), index, index);
             iter.remove();
             m_quoteNum--;

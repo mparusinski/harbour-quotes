@@ -41,6 +41,8 @@ public:
 private:
     void clearModel();
 
+    void filterUsingToken(const QString& tokenString);
+
     QHash<int, QByteArray> m_roles;
     QList<Quote::QuotePtr> m_quotesVisible;
     int m_quoteNum;
