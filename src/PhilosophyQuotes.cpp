@@ -1,4 +1,6 @@
 /*
+  Copyright 2015 Michal Parusinski <mparusinski@gmail.com>
+
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 2 of the License, or
@@ -20,14 +22,13 @@
 #include <sailfishapp.h>
 #include "quotecontroller.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
     QSharedPointer<QQuickView> view(SailfishApp::createView());
 
-    QuoteController quoteController(view);
+    QuoteController controller(view);
 
-    view->rootContext()->setContextProperty("quoteController", &quoteController);
+    view->rootContext()->setContextProperty("quoteController", &controller);
     view->setSource(SailfishApp::pathTo("qml/PhilosophyQuotes.qml"));
     view->show();
 

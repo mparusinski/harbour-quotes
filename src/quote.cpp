@@ -1,4 +1,6 @@
 /*
+  Copyright 2015 Michal Parusinski <mparusinski@gmail.com>
+
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 2 of the License, or
@@ -15,13 +17,10 @@
 
 #include "quote.h"
 
-Quote::Quote(QObject *parent) :
-    QObject(parent)
-{
+Quote::Quote(void) {
 }
 
-Quote::Quote(const QString& philosopher, const QString& quote, QObject* parent) : QObject(parent)
-{
+Quote::Quote(const QString& philosopher, const QString& quote) {
     m_philosopher = philosopher;
     m_quote = quote;
     m_uniqueID = IDRegistry::getRegistry()->getNextID();
@@ -31,16 +30,8 @@ QString Quote::philosopher() const {
     return m_philosopher;
 }
 
-void Quote::setPhilosopher(const QString& philosopher) {
-    m_philosopher = philosopher;
-}
-
 QString Quote::quote() const {
     return m_quote;
-}
-
-void Quote::setQuote(const QString& quote) {
-    m_quote = quote;
 }
 
 u_int32_t Quote::uniqueID() const {

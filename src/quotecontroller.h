@@ -1,4 +1,6 @@
 /*
+  Copyright 2015 Michal Parusinski <mparusinski@gmail.com>
+
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 2 of the License, or
@@ -23,13 +25,13 @@
 #include "quotedb.h"
 #include "quotemodel.h"
 
-class QuoteController : public QObject
-{
+class QuoteController : public QObject {
     Q_OBJECT
 public:
     typedef QSharedPointer<QuoteModel> QuoteModelPtr;
 
-    explicit QuoteController(const QSharedPointer<QQuickView>& mainView, QObject* parent = 0);
+    explicit QuoteController(const QSharedPointer<QQuickView>& mainView,
+      QObject* parent = 0);
 
     Q_INVOKABLE void loadQuote(const QString& quoteID);
 
@@ -51,11 +53,9 @@ private:
     QSharedPointer<QQuickView> m_mainView;
     Quote::QuotePtr m_currentQuote;
     QuoteModelPtr m_quoteModel;
-    QString m_previousSearchString;
     QuoteModel::ModelIteratorPtr m_modelIterator;
 
     void populateModel();
-
 };
 
 #endif // QUOTECONTROLLER_H

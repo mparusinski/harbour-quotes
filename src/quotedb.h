@@ -1,4 +1,6 @@
 /*
+  Copyright 2015 Michal Parusinski <mparusinski@gmail.com>
+
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 2 of the License, or
@@ -21,34 +23,28 @@
 
 #include "quote.h"
 
-class QuoteDB : public QObject
-{
-    Q_OBJECT
+class QuoteDB {
 public:
     typedef QMap<QString, Quote::QuotePtr> ContainerType;
     typedef QMapIterator<QString, Quote::QuotePtr> ContainerIteratorType;
-    typedef QMutableMapIterator<QString, Quote::QuotePtr> ContainerMutableIteratorType;
+    typedef QMutableMapIterator<QString, Quote::QuotePtr>
+      ContainerMutableIteratorType;
 
     ContainerType& getQuotes();
 
     static QuoteDB* getQuoteDB();
 
-    Quote::QuotePtr getQuoteWithID(u_int32_t id);
-
-signals:
-
-public slots:
+    const Quote::QuotePtr& getQuoteWithID(const u_int32_t id) const;
 
 private:
     ContainerType m_quotes;
     bool m_visitorSet;
-    ContainerType::ConstIterator m_visitorIterator;
     QMap<u_int32_t, Quote::QuotePtr> m_quotesByIDs;
     static QuoteDB * instance;
 
-    QuoteDB(QObject *parent = 0);
+    QuoteDB();
 
     bool readQuotesFile(QUrl pathToFile);
 };
 
-#endif // QUOTEDB_H
+#endif  // QUOTEDB_H

@@ -1,4 +1,6 @@
 /*
+  Copyright 2015 Michal Parusinski <mparusinski@gmail.com>
+
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 2 of the License, or
@@ -18,11 +20,9 @@
 #include <QDebug>
 #include <QQmlContext>
 
-QuoteController::QuoteController(const QSharedPointer<QQuickView>& mainView, QObject * parent) :
-    QObject(parent)
-{
+QuoteController::QuoteController(const QSharedPointer<QQuickView>& mainView,
+                                 QObject * parent) : QObject(parent) {
     m_mainView = mainView;
-    m_previousSearchString = "";
     m_quoteModel = QuoteModelPtr(new QuoteModel());
     populateModel();
 }
@@ -61,7 +61,7 @@ void QuoteController::filterUsingSearchString(const QString& searchString) {
 
 void QuoteController::populateModel() {
     QQmlContext * rootCtx = m_mainView->rootContext();
-    rootCtx->setContextProperty("quoteModel", &(*m_quoteModel)); // I hate this hack
+    rootCtx->setContextProperty("quoteModel", &(*m_quoteModel));
     m_quoteModel->repopulateQuotes();
 }
 

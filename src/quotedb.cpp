@@ -1,4 +1,6 @@
 /*
+  Copyright 2015 Michal Parusinski <mparusinski@gmail.com>
+
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 2 of the License, or
@@ -25,19 +27,17 @@
 
 QuoteDB * QuoteDB::instance = NULL;
 
-QuoteDB::QuoteDB(QObject *parent) :
-    QObject(parent)
-{
+QuoteDB::QuoteDB(void) {
     if (!readQuotesFile(SailfishApp::pathTo("qml/content/quotes_en.json"))) {
-        Quote::QuotePtr emptyQuote = Quote::QuotePtr(new Quote("Quote missing", "No philosopher"));
+        Quote::QuotePtr emptyQuote
+          = Quote::QuotePtr(new Quote("Quote missing", "No philosopher"));
         m_quotes.insert("", emptyQuote);
         m_quotesByIDs.insert(emptyQuote->uniqueID(), emptyQuote);
     }
     m_visitorSet = false;
 }
 
-QuoteDB * QuoteDB::getQuoteDB()
-{
+QuoteDB * QuoteDB::getQuoteDB() {
     if (instance == NULL) {
         instance = new QuoteDB;
     }
@@ -56,7 +56,8 @@ bool QuoteDB::readQuotesFile(QUrl pathToFile) {
 
     QString fileContent = quotesFile.readAll();
     QJsonParseError parseError;
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(fileContent.toUtf8(), &parseError);
+    QJsonDocument jsonDoc
+      = QJsonDocument::fromJson(fileContent.toUtf8(), &parseError);
     qWarning() << parseError.errorString();
 
     QJsonObject jsonObj = jsonDoc.object();
@@ -75,7 +76,7 @@ bool QuoteDB::readQuotesFile(QUrl pathToFile) {
         QString philosopher = jsonQuoteObj["philosopher"].toString();
 
         Quote::QuotePtr quote(new Quote(philosopher, quoteText));
-        m_quotes.insert(quoteText, quote); // some way to guarantee sortedness
+        m_quotes.insert(quoteText, quote);  // some way to guarantee sortedness
         m_quotesByIDs.insert(quote->uniqueID(), quote);
     }
 
@@ -87,8 +88,9 @@ QuoteDB::ContainerType& QuoteDB::getQuotes() {
     return m_quotes;
 }
 
-Quote::QuotePtr QuoteDB::getQuoteWithID(u_int32_t id) {
-    QMap<u_int32_t, Quote::QuotePtr>::const_iterator iter = m_quotesByIDs.find(id);
+const Quote::QuotePtr& QuoteDB::getQuoteWithID(u_int32_t id) const {
+    QMap<u_int32_t, Quote::QuotePtr>::const_iterator iter
+      = m_quotesByIDs.find(id);
     if (iter != m_quotesByIDs.end()) {
         return iter.value();
     } else {

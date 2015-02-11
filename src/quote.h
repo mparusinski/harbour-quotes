@@ -1,4 +1,6 @@
 /*
+  Copyright 2015 Michal Parusinski <mparusinski@gmail.com>
+
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 2 of the License, or
@@ -19,42 +21,26 @@
 #include <QObject>
 #include <QString>
 #include <QSharedPointer>
-
 #include "idregistry.h"
 
-class Quote : public QObject
-{
-    Q_OBJECT
-
-    Q_PROPERTY(QString quote READ quote WRITE setQuote NOTIFY quoteChanged)
-    Q_PROPERTY(QString philosopher READ philosopher WRITE setPhilosopher NOTIFY philosopherChanged)
-
+class Quote {
 public:
     typedef QSharedPointer<Quote> QuotePtr;
 
-    explicit Quote(QObject *parent = 0);
+    Quote();
 
-    Quote(const QString& philosopher, const QString& quote, QObject* parent = 0);
+    Quote(const QString& philosopher, const QString& quote);
 
     QString philosopher() const;
-    void setPhilosopher(const QString& philosopher);
 
     QString quote() const;
-    void setQuote(const QString& quote);
 
     u_int32_t uniqueID() const;
-
-signals:
-    void quoteChanged();
-    void philosopherChanged();
-
-public slots:
 
 private:
     QString m_philosopher;
     QString m_quote;
     u_int32_t m_uniqueID;
-
 };
 
 #endif // QUOTE_H
