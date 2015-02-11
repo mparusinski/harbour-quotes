@@ -39,6 +39,8 @@ public:
     virtual QHash<int, QByteArray> roleNames() const;
 
 private:
+    Q_DISABLE_COPY(QuoteModel)
+
     void clearModel();
 
     void filterUsingToken(const QString& tokenString);

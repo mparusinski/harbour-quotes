@@ -50,6 +50,8 @@ signals:
 public slots:
 
 private:
+    Q_DISABLE_COPY(QuoteController)
+
     QSharedPointer<QQuickView> m_mainView;
     Quote::QuotePtr m_currentQuote;
     QuoteModelPtr m_quoteModel;

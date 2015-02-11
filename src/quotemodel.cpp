@@ -54,6 +54,7 @@ QuoteModel::ModelIteratorPtr QuoteModel::getIterToQuote(
             return modelIterator;
         }
     }
+    return modelIterator;
 }
 
 void QuoteModel::clearModel() {
@@ -86,7 +87,7 @@ void QuoteModel::filterUsingToken(const QString& tokenString) {
         const QString & quote = elem->quote();
         bool strContained =
              philosopher.contains(tokenString, Qt::CaseInsensitive)
-          || quote.contains(tokenString, Qt::CaseInsensitive;
+          || quote.contains(tokenString, Qt::CaseInsensitive);
         if (!strContained) {
             beginRemoveRows(QModelIndex(), index, index);
             iter.remove();

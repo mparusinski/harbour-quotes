@@ -34,9 +34,11 @@ public:
 
     static QuoteDB* getQuoteDB();
 
-    const Quote::QuotePtr& getQuoteWithID(const u_int32_t id) const;
+    Quote::QuotePtr getQuoteWithID(const u_int32_t id) const;
 
 private:
+    Q_DISABLE_COPY(QuoteDB)
+
     ContainerType m_quotes;
     bool m_visitorSet;
     QMap<u_int32_t, Quote::QuotePtr> m_quotesByIDs;

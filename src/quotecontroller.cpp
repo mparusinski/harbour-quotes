@@ -69,4 +69,7 @@ void QuoteController::loadQuote(const QString& quoteID) {
     u_int32_t realQuoteID = static_cast<u_int32_t>(quoteID.toLongLong());
     m_currentQuote = QuoteDB::getQuoteDB()->getQuoteWithID(realQuoteID);
     m_modelIterator = m_quoteModel->getIterToQuote(realQuoteID);
+    if (m_currentQuote.isNull()) {
+        qWarning() << "Quote with id " << quoteID << "not found";
+    }
 }

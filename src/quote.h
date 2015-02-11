@@ -38,6 +38,8 @@ public:
     u_int32_t uniqueID() const;
 
 private:
+    Q_DISABLE_COPY(Quote)
+
     QString m_philosopher;
     QString m_quote;
     u_int32_t m_uniqueID;

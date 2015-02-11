@@ -88,7 +88,7 @@ QuoteDB::ContainerType& QuoteDB::getQuotes() {
     return m_quotes;
 }
 
-const Quote::QuotePtr& QuoteDB::getQuoteWithID(u_int32_t id) const {
+Quote::QuotePtr QuoteDB::getQuoteWithID(u_int32_t id) const {
     QMap<u_int32_t, Quote::QuotePtr>::const_iterator iter
       = m_quotesByIDs.find(id);
     if (iter != m_quotesByIDs.end()) {
