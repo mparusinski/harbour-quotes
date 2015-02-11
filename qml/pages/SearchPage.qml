@@ -31,7 +31,7 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.fill: parent
-        anchors.margins: Theme.paddingLarge
+        // anchors.margins: Theme.paddingLarge
 
         // prevent newly added list delegates from stealing focus away from the search field
         currentIndex: -1
@@ -39,7 +39,6 @@ Page {
         delegate: Column {
             height: 120
             width: parent.width
-            anchors.margins: parent.margins
             Text {
                 id: quoteText
                 color: Theme.primaryColor
