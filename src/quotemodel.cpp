@@ -93,6 +93,7 @@ void QuoteModel::filterUsingToken(const QString& tokenString) {
             iter.remove();
             m_quoteNum--;
             endRemoveRows();
+            index--;
         }
     }
 }
@@ -118,4 +119,12 @@ QVariant QuoteModel::data(const QModelIndex &index, int role) const {
 
 QHash<int, QByteArray> QuoteModel::roleNames() const {
     return m_roles;
+}
+
+void QuoteModel::printAllQuotes() const {
+    QListIterator<Quote::QuotePtr> iter(m_quotesVisible);
+    while (iter.hasNext()) {
+        Quote::QuotePtr quote = iter.next();
+        qDebug() << quote->quote();
+    }
 }

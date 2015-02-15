@@ -45,6 +45,8 @@ public:
 
     Q_INVOKABLE void filterUsingSearchString(const QString& searchString);
 
+    Q_INVOKABLE int quoteNumber() const;
+
 signals:
 
 public slots:

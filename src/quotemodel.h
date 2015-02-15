@@ -38,6 +38,9 @@ public:
 
     virtual QHash<int, QByteArray> roleNames() const;
 
+    // DEBUG METHOD
+    void printAllQuotes() const;
+
 private:
     Q_DISABLE_COPY(QuoteModel)
 

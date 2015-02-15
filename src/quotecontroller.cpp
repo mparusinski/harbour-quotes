@@ -53,6 +53,10 @@ void QuoteController::prevQuote()  {
     }
 }
 
+int QuoteController::quoteNumber() const {
+    return m_quoteModel->rowCount();
+}
+
 void QuoteController::filterUsingSearchString(const QString& searchString) {
     // dead stupid
     m_quoteModel->repopulateQuotes();
