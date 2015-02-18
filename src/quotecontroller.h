@@ -58,6 +58,7 @@ private:
     Quote::QuotePtr m_currentQuote;
     QuoteModelPtr m_quoteModel;
     QuoteModel::ModelIteratorPtr m_modelIterator;
+    bool m_iteratorForward;
 
     void populateModel();
 };

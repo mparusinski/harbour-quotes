@@ -33,41 +33,38 @@ SilicaListView {
     // prevent newly added list delegates from stealing focus away from the search field
     currentIndex: -1
 
-    delegate: Component {
-        id: listItem
-        Column {
-            height: quoteText.height + philosopherText.height
+    delegate: Column {
+        height: quoteText.height + philosopherText.height
+        width: parent.width
+        Text {
+            id: quoteText
+            color: Theme.primaryColor
             width: parent.width
-            Text {
-                id: quoteText
-                color: Theme.primaryColor
-                width: parent.width
-                anchors.top: parent.top
-                text: "<p>" + quote + "</p>"
-                font.pixelSize: Theme.fontSizeMedium
-                clip: true
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        quoteController.loadQuote(quoteID);
-                        pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
-                    }
+            anchors.top: parent.top
+            text: "<p>" + quote + "</p>"
+            font.pixelSize: Theme.fontSizeMedium
+            clip: true
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    quoteController.loadQuote(quoteID);
+                    pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
                 }
             }
-            Text {
-                id: philosopherText
-                width: parent.width
-                anchors.verticalCenter: quoteText.bottom
-                horizontalAlignment: Text.AlignRight
-                color: Theme.secondaryHighlightColor
-                text: "<i>" + philosopher + "</i>"
-                font.pixelSize: Theme.fontSizeSmall
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        quoteController.loadQuote(quoteID);
-                        pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
-                    }
+        }
+        Text {
+            id: philosopherText
+            width: parent.width
+            anchors.verticalCenter: quoteText.bottom
+            horizontalAlignment: Text.AlignRight
+            color: Theme.secondaryHighlightColor
+            text: "<i>" + philosopher + "</i>"
+            font.pixelSize: Theme.fontSizeSmall
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    quoteController.loadQuote(quoteID);
+                    pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
                 }
             }
         }

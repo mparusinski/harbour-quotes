@@ -24,6 +24,7 @@ QuoteController::QuoteController(const QSharedPointer<QQuickView>& mainView,
                                  QObject * parent) : QObject(parent) {
     m_mainView = mainView;
     m_quoteModel = QuoteModelPtr(new QuoteModel());
+    loadQuote("0");
     populateModel();
 }
 
@@ -35,22 +36,30 @@ QString QuoteController::getPhilosopher() const {
     return m_currentQuote->philosopher();
 }
 
-void QuoteController::nextQuote()  {
+void QuoteController::nextQuote() {
+    if (!m_iteratorForward)
+        m_modelIterator->next();
+
     if (m_modelIterator->hasNext()) {
         m_currentQuote = m_modelIterator->next();
     } else {
         m_modelIterator->toFront();
         m_currentQuote = m_modelIterator->next();
     }
+    m_iteratorForward = true;
 }
 
-void QuoteController::prevQuote()  {
+void QuoteController::prevQuote() {
+    if (m_iteratorForward)
+        m_modelIterator->previous();
+
     if (m_modelIterator->hasPrevious()) {
         m_currentQuote = m_modelIterator->previous();
     } else {
         m_modelIterator->toBack();
         m_currentQuote = m_modelIterator->previous();
     }
+    m_iteratorForward = false;
 }
 
 int QuoteController::quoteNumber() const {
@@ -73,6 +82,7 @@ void QuoteController::loadQuote(const QString& quoteID) {
     u_int32_t realQuoteID = static_cast<u_int32_t>(quoteID.toLongLong());
     m_currentQuote = QuoteDB::getQuoteDB()->getQuoteWithID(realQuoteID);
     m_modelIterator = m_quoteModel->getIterToQuote(realQuoteID);
+    m_iteratorForward = true;
     if (m_currentQuote.isNull()) {
         qWarning() << "Quote with id " << quoteID << "not found";
     }
