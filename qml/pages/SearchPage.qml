@@ -16,76 +16,78 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-SilicaListView {
-    PullDownMenu {
-        MenuItem {
-            text: qsTr("About")
-            onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
+Page {
+    SilicaListView {
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("About")
+                onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
+            }
         }
-    }
 
-    id: listView
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.fill: parent
-    // anchors.margins: Theme.paddingLarge
+        id: listView
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.fill: parent
+        // anchors.margins: Theme.paddingLarge
 
-    // prevent newly added list delegates from stealing focus away from the search field
-    currentIndex: -1
+        // prevent newly added list delegates from stealing focus away from the search field
+        currentIndex: -1
 
-    delegate: Column {
-        height: quoteText.height + philosopherText.height
-        width: parent.width
-        Text {
-            id: quoteText
-            color: Theme.primaryColor
+        delegate: Column {
+            height: quoteText.height + philosopherText.height
             width: parent.width
-            anchors.top: parent.top
-            text: "<p>" + quote + "</p>"
-            font.pixelSize: Theme.fontSizeMedium
-            clip: true
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    quoteController.loadQuote(quoteID);
-                    pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
+            Text {
+                id: quoteText
+                color: Theme.primaryColor
+                width: parent.width
+                anchors.top: parent.top
+                text: "<p>" + quote + "</p>"
+                font.pixelSize: Theme.fontSizeMedium
+                clip: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        // quoteController.loadQuote(quoteID);
+                        pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
+                    }
+                }
+            }
+            Text {
+                id: philosopherText
+                width: parent.width
+                anchors.verticalCenter: quoteText.bottom
+                horizontalAlignment: Text.AlignRight
+                color: Theme.secondaryHighlightColor
+                text: "<i>" + philosopher + "</i>"
+                font.pixelSize: Theme.fontSizeSmall
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        // quoteController.loadQuote(quoteID);
+                        pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
+                    }
                 }
             }
         }
-        Text {
-            id: philosopherText
+
+        header: Column {
+            height: searchField.height
             width: parent.width
-            anchors.verticalCenter: quoteText.bottom
-            horizontalAlignment: Text.AlignRight
-            color: Theme.secondaryHighlightColor
-            text: "<i>" + philosopher + "</i>"
-            font.pixelSize: Theme.fontSizeSmall
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    quoteController.loadQuote(quoteID);
-                    pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
+            anchors.margins: parent.margins
+            SearchField {
+                id: searchField
+                width: parent.width
+                placeholderText: "Search"
+
+                onTextChanged: {
+                    quoteController.filterUsingSearchString(text);
                 }
             }
         }
+
+        model: quoteModel
+
+        VerticalScrollDecorator { }
     }
-
-    header: Column {
-        height: searchField.height
-        width: parent.width
-        anchors.margins: parent.margins
-        SearchField {
-            id: searchField
-            width: parent.width
-            placeholderText: "Search"
-
-            onTextChanged: {
-                quoteController.filterUsingSearchString(text);
-            }
-        }
-    }
-
-    model: quoteModel
-
-    VerticalScrollDecorator { }
 }
