@@ -37,10 +37,6 @@
 <context>
     <name>QuotePage</name>
     <message>
-        <source>About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Next quote</source>
         <translation type="unfinished"></translation>
     </message>
