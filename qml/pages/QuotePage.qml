@@ -63,18 +63,23 @@ Page {
         Column {
             id: column
             width: page.width
-            height: page.height
+            height: pageHeader.height + column.spacing + subColumn.height
             spacing: Theme.paddingLarge
             PageHeader {
+                id: pageHeader
                 title: qsTr("Quote")
             }
             Column {
+                id: subColumn
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.top: pageHeader.bottom
                 spacing: Theme.paddingLarge
                 width: page.width
+                height: quoteField.height + 5 * subColumn.spacing + philosopherField.height
 
                 Text {
                     id: quoteField
+                    anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.margins: Theme.paddingLarge
@@ -87,6 +92,7 @@ Page {
                 }
                 Text {
                     id: philosopherField
+                    anchors.top: quoteField.bottom
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.margins: Theme.paddingLarge
