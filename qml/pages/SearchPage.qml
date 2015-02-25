@@ -48,7 +48,7 @@ Page {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        // quoteController.loadQuote(quoteID);
+                        quoteController.loadQuote(quoteID);
                         pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
                     }
                 }
@@ -64,7 +64,7 @@ Page {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        // quoteController.loadQuote(quoteID);
+                        quoteController.loadQuote(quoteID);
                         pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
                     }
                 }
