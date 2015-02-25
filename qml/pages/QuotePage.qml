@@ -34,6 +34,8 @@ Page {
 
         // PullDownMenu and PushUpMenu must be declared in SilicaFlickable, SilicaListView or SilicaGridView
         PullDownMenu {
+            id: dropdown
+            visible: quoteController.quoteNumber() > 1
             MenuItem {
                 text: qsTr("Previous quote")
                 onClicked: {
