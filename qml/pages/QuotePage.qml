@@ -56,14 +56,14 @@ Page {
         }
 
         // Tell SilicaFlickable the height of its content.
-        contentHeight: column.height
+        contentHeight: pageHeader.height + column.spacing + subColumn.height
 
         // Place our content in a Column.  The PageHeader is always placed at the top
         // of the page, followed by our content.
         Column {
             id: column
             width: page.width
-            height: pageHeader.height + column.spacing + subColumn.height
+            height: page.height
             spacing: Theme.paddingLarge
             PageHeader {
                 id: pageHeader
@@ -71,18 +71,17 @@ Page {
             }
             Column {
                 id: subColumn
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.top: pageHeader.bottom
                 spacing: Theme.paddingLarge
+                anchors.top: pageHeader.top
                 width: page.width
-                height: quoteField.height + 5 * subColumn.spacing + philosopherField.height
+                height: ((quoteField.height + 5 * subColumn.spacing + philosopherField.height) > page.height) ? (quoteField.height + 5 * subColumn.spacing + philosopherField.height) : page.height
 
                 Text {
                     id: quoteField
-                    anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.margins: Theme.paddingLarge
+                    anchors.verticalCenter: parent.verticalCenter
                     width: parent.width
                     horizontalAlignment: Text.AlignJustify
                     wrapMode: Text.WordWrap
