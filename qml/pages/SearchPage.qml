@@ -29,7 +29,6 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.fill: parent
-        // anchors.margins: Theme.paddingLarge
 
         // prevent newly added list delegates from stealing focus away from the search field
         currentIndex: -1
@@ -40,7 +39,9 @@ Page {
             Text {
                 id: quoteText
                 color: Theme.primaryColor
-                width: parent.width
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.leftMargin: Theme.paddingLarge
                 anchors.top: parent.top
                 text: "<p>" + quote + "</p>"
                 font.pixelSize: Theme.fontSizeMedium
@@ -55,7 +56,9 @@ Page {
             }
             Text {
                 id: philosopherText
-                width: parent.width
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.margins: Theme.paddingLarge
                 anchors.verticalCenter: quoteText.bottom
                 horizontalAlignment: Text.AlignRight
                 color: Theme.secondaryHighlightColor
@@ -74,10 +77,11 @@ Page {
         header: Column {
             height: searchField.height
             width: parent.width
-            anchors.margins: parent.margins
             SearchField {
                 id: searchField
-                width: parent.width
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.margins: Theme.paddingLarge
                 placeholderText: "Search"
 
                 onTextChanged: {
