@@ -26,6 +26,7 @@ Page {
         }
 
         id: listView
+        anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.fill: parent
@@ -79,6 +80,7 @@ Page {
             width: parent.width
             SearchField {
                 id: searchField
+                anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.margins: Theme.paddingLarge
