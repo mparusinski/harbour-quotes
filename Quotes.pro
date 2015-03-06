@@ -10,26 +10,27 @@
 #   - translation filenames have to be changed
 
 # The name of your application
-TARGET = PhilosophyQuotes
+TARGET = Quotes
 
 CONFIG += sailfishapp
 
-SOURCES += src/PhilosophyQuotes.cpp \
+SOURCES += src/Quotes.cpp \
     src/quotecontroller.cpp \
     src/quote.cpp \
     src/quotedb.cpp \
     src/quotemodel.cpp \
     src/idregistry.cpp
 
-OTHER_FILES += qml/PhilosophyQuotes.qml \
+OTHER_FILES += qml/Quotes.qml \
     qml/cover/CoverPage.qml \
     qml/content/images/*.png \
-    rpm/PhilosophyQuotes.changes.in \
-    rpm/PhilosophyQuotes.spec \
-    rpm/PhilosophyQuotes.yaml \
+    rpm/Quotes.changes.in \
+    rpm/Quotes.spec \
+    rpm/Quotes.yaml \
     translations/*.ts \
     qml/content/quotes_en.json \
-    PhilosophyQuotes.desktop \
+    Quotes.desktop \
+    Quotes.png \
     qml/pages/AboutPage.qml \
     qml/pages/QuotePage.qml \
     qml/pages/SearchPage.qml
@@ -37,7 +38,7 @@ OTHER_FILES += qml/PhilosophyQuotes.qml \
 # to disable building translations every time, comment out the
 # following CONFIG line
 CONFIG += sailfishapp_i18n
-TRANSLATIONS += translations/PhilosophyQuotes-de.ts
+TRANSLATIONS += translations/Quotes-de.ts
 
 HEADERS += \
     src/quotecontroller.h \

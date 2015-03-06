@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
 X-Nemo-Application-Type=silica-qt5
-Icon=PhilosophyQuotes
-Exec=PhilosophyQuotes
-Name=PhilosophyQuotes
+Icon=Quotes
+Exec=Quotes
+Name=Quotes
 # translation example:
 # your app name in German locale (de)
-Name[de]=PhilosophyQuotes
+Name[de]=Quotes
 
