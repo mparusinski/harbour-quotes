@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
     QuoteController controller(view);
 
     view->rootContext()->setContextProperty("quoteController", &controller);
-    view->setSource(SailfishApp::pathTo("qml/PhilosophyQuotes.qml"));
+    view->setSource(SailfishApp::pathTo("qml/Quotes.qml"));
     view->show();
 
     return app->exec();
