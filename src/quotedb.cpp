@@ -28,7 +28,7 @@
 QuoteDB * QuoteDB::instance = NULL;
 
 QuoteDB::QuoteDB(void) {
-    if (!readQuotesFile(SailfishApp::pathTo("qml/content/quotes_en.json"))) {
+    if (!readQuotes()) {
         Quote::QuotePtr emptyQuote
           = Quote::QuotePtr(new Quote("Quote missing", "No philosopher"));
         m_quotes.insert("", emptyQuote);
@@ -43,6 +43,24 @@ QuoteDB * QuoteDB::getQuoteDB() {
     }
 
     return instance;
+}
+
+bool QuoteDB::readQuotes() {
+    QUrl directoryUrl = SailfishApp::pathTo("qml/content");
+    QDir directory(directoryUrl.toLocalFile());
+    QStringList nameFilters;
+    nameFilters.append("*.json");
+    QStringList files = directory.entryList(nameFilters);
+    QStringList::Iterator iter;
+    for (iter = files.begin(); iter != files.end(); ++iter) {
+        const QString& file = *iter;
+        qDebug() << file;
+        QUrl pathToFile = SailfishApp::pathTo("qml/content/" + file);
+        if (!readQuotesFile(pathToFile)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 bool QuoteDB::readQuotesFile(QUrl pathToFile) {

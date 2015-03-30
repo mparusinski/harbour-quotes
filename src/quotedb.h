@@ -46,7 +46,8 @@ private:
 
     QuoteDB();
 
-    bool readQuotesFile(QUrl pathToFile);
+    bool readQuotes();
+    bool readQuotesFile(QUrl filepath);
 };
 
 #endif  // QUOTEDB_H
