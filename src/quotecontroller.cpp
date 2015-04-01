@@ -24,8 +24,10 @@ QuoteController::QuoteController(const QSharedPointer<QQuickView>& mainView,
                                  QObject * parent) : QObject(parent) {
     m_mainView = mainView;
     m_quoteModel = QuoteModelPtr(new QuoteModel());
-    loadQuote("0");
-    populateModel();
+    if (QuoteDB::getQuoteDB()->numQuotes() > 0) {
+        loadQuote("0");
+        populateModel();
+    }
 }
 
 QString QuoteController::getQuote() const {

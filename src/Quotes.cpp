@@ -21,11 +21,13 @@
 
 #include <sailfishapp.h>
 #include "quotecontroller.h"
+#include "quotedb.h"
 
 int main(int argc, char *argv[]) {
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
     QSharedPointer<QQuickView> view(SailfishApp::createView());
 
+    QuoteDB::getQuoteDB()->readQuotes();
     QuoteController controller(view);
 
     view->rootContext()->setContextProperty("quoteController", &controller);

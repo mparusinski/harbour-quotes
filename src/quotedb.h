@@ -30,11 +30,15 @@ public:
     typedef QMutableMapIterator<QString, Quote::QuotePtr>
       ContainerMutableIteratorType;
 
+    bool readQuotes();
+
     ContainerType& getQuotes();
 
     static QuoteDB* getQuoteDB();
 
     Quote::QuotePtr getQuoteWithID(const u_int32_t id) const;
+
+    int numQuotes() const;
 
 private:
     Q_DISABLE_COPY(QuoteDB)
@@ -46,7 +50,6 @@ private:
 
     QuoteDB();
 
-    bool readQuotes();
     bool readQuotesFile(QUrl filepath);
 };
 

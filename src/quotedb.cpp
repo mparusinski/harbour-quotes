@@ -28,12 +28,6 @@
 QuoteDB * QuoteDB::instance = NULL;
 
 QuoteDB::QuoteDB(void) {
-    if (!readQuotes()) {
-        Quote::QuotePtr emptyQuote
-          = Quote::QuotePtr(new Quote("Quote missing", "No philosopher"));
-        m_quotes.insert("", emptyQuote);
-        m_quotesByIDs.insert(emptyQuote->uniqueID(), emptyQuote);
-    }
     m_visitorSet = false;
 }
 
@@ -54,13 +48,16 @@ bool QuoteDB::readQuotes() {
     QStringList::Iterator iter;
     for (iter = files.begin(); iter != files.end(); ++iter) {
         const QString& file = *iter;
-        qDebug() << file;
         QUrl pathToFile = SailfishApp::pathTo("qml/content/" + file);
         if (!readQuotesFile(pathToFile)) {
             return false;
         }
     }
     return true;
+}
+
+int QuoteDB::numQuotes() const {
+    return m_quotes.size();
 }
 
 bool QuoteDB::readQuotesFile(QUrl pathToFile) {
