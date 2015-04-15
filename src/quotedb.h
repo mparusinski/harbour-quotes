@@ -51,6 +51,10 @@ private:
     QuoteDB();
 
     bool readQuotesFile(QUrl filepath);
+
+    QString readRegularFile(QUrl& pathToFile);
+
+    QString readZFile(QUrl& pathToFile);
 };
 
 #endif  // QUOTEDB_H

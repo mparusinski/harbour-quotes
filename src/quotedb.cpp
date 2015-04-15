@@ -25,6 +25,9 @@
 #include <QStringList>
 #include <QDir>
 
+#include <vector>
+#include <zlib.h>
+
 QuoteDB * QuoteDB::instance = NULL;
 
 QuoteDB::QuoteDB(void) {
@@ -43,7 +46,7 @@ bool QuoteDB::readQuotes() {
     QUrl directoryUrl = SailfishApp::pathTo("qml/content");
     QDir directory(directoryUrl.toLocalFile());
     QStringList nameFilters;
-    nameFilters.append("*.json");
+    nameFilters.append("*.json.gz");
     QStringList files = directory.entryList(nameFilters);
     QStringList::Iterator iter;
     for (iter = files.begin(); iter != files.end(); ++iter) {
@@ -60,16 +63,47 @@ int QuoteDB::numQuotes() const {
     return m_quotes.size();
 }
 
-bool QuoteDB::readQuotesFile(QUrl pathToFile) {
+QString QuoteDB::readZFile(QUrl& pathToFile) {
+    QString localFile = pathToFile.toLocalFile();
+    gzFile inFileZ = gzopen(localFile.toStdString().c_str(), "rb");
+    if (inFileZ == NULL) {
+        qCritical() << "Unable to open file " << qPrintable(localFile);
+        qDebug() << "Current path is " << QDir::currentPath();
+        return "";
+    }
+    char unzipBuffer[8192];
+    int unzippedBytes;
+    std::vector<char> unzippedData;
+    while (true) {
+        unzippedBytes = gzread(inFileZ, unzipBuffer, 8192);
+        if (unzippedBytes > 0) {
+            for (int i = 0; i < unzippedBytes; i++) {
+                unzippedData.push_back(unzipBuffer[i]);
+            }
+        } else {
+            break;
+        }
+    }
+    gzclose(inFileZ);
+    return QString::fromUtf8(&unzippedData[0]);
+}
+
+QString QuoteDB::readRegularFile(QUrl& pathToFile) {
     QString localFile = pathToFile.toLocalFile();
     QFile quotesFile(localFile);
     if (!quotesFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qCritical() << "Unable to open file " << qPrintable(localFile);
         qDebug() << "Current path is " << QDir::currentPath();
-        return false;
+        return "";
     }
 
-    QString fileContent = quotesFile.readAll();
+    QString content = quotesFile.readAll();
+    quotesFile.close();
+    return content;
+}
+
+bool QuoteDB::readQuotesFile(QUrl pathToFile) {
+    QString fileContent = readZFile(pathToFile);
     QJsonParseError parseError;
     QJsonDocument jsonDoc
       = QJsonDocument::fromJson(fileContent.toUtf8(), &parseError);
@@ -80,7 +114,6 @@ bool QuoteDB::readQuotesFile(QUrl pathToFile) {
 
     if (quotes == QJsonArray()) {
         qCritical() << "Malformed JSON file";
-        quotesFile.close();
         return false;
     }
 
@@ -95,7 +128,6 @@ bool QuoteDB::readQuotesFile(QUrl pathToFile) {
         m_quotesByIDs.insert(quote->uniqueID(), quote);
     }
 
-    quotesFile.close();
     return true;
 }
 

@@ -13,6 +13,7 @@
 TARGET = Quotes
 
 CONFIG += sailfishapp
+PKGCONFIG += zlib
 
 SOURCES += src/Quotes.cpp \
     src/quotecontroller.cpp \
