@@ -43,7 +43,6 @@ Page {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.leftMargin: Theme.paddingLarge
-                anchors.top: parent.top
                 text: "<p>" + quote + "</p>"
                 font.pixelSize: Theme.fontSizeMedium
                 clip: true
@@ -59,8 +58,7 @@ Page {
                 id: philosopherText
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.margins: Theme.paddingLarge
-                anchors.verticalCenter: quoteText.bottom
+                anchors.rightMargin: Theme.paddingLarge
                 horizontalAlignment: Text.AlignRight
                 color: Theme.secondaryHighlightColor
                 text: "<i>" + philosopher + "</i>"
@@ -88,6 +86,10 @@ Page {
 
                 onTextChanged: {
                     quoteController.filterUsingSearchString(text);
+                }
+
+                Keys.onReturnPressed: {
+                    Qt.inputMethod.hide()
                 }
             }
         }
