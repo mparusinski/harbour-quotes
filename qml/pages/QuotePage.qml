@@ -74,7 +74,7 @@ Page {
                 spacing: Theme.paddingLarge
                 anchors.top: pageHeader.top
                 width: page.width
-                height: ((quoteField.height + 5 * subColumn.spacing + philosopherField.height) > page.height) ? (quoteField.height + 5 * subColumn.spacing + philosopherField.height) : page.height
+                height: Math.max(quoteField.height + philosopherField.height + 4 * Theme.paddingLarge, page.height - pageHeader.height - Theme.paddingLarge)
 
                 Text {
                     id: quoteField
