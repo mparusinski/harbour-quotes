@@ -13,10 +13,10 @@ Name:       Quotes
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Quotes display quotes from philosophers
-Version:    0.2
+Version:    0.3
 Release:    1
 Group:      Qt/Qt
-License:    LICENSE
+License:    GPLv2
 URL:        http://example.org/
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  Quotes.yaml
