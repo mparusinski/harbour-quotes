@@ -43,7 +43,7 @@ QuoteDB * QuoteDB::getQuoteDB() {
 }
 
 bool QuoteDB::readQuotes() {
-    QUrl directoryUrl = SailfishApp::pathTo("qml/content");
+    QUrl directoryUrl = SailfishApp::pathTo("./");
     QDir directory(directoryUrl.toLocalFile());
     QStringList nameFilters;
     nameFilters.append("*.json.gz");
@@ -51,7 +51,7 @@ bool QuoteDB::readQuotes() {
     QStringList::Iterator iter;
     for (iter = files.begin(); iter != files.end(); ++iter) {
         const QString& file = *iter;
-        QUrl pathToFile = SailfishApp::pathTo("qml/content/" + file);
+        QUrl pathToFile = SailfishApp::pathTo(file);
         if (!readQuotesFile(pathToFile)) {
             return false;
         }

@@ -29,12 +29,17 @@ OTHER_FILES += qml/Quotes.qml \
     rpm/Quotes.spec \
     rpm/Quotes.yaml \
     translations/*.ts \
-    qml/content/quotes_en.json \
+    quotesdb/*.json.gz \
     Quotes.desktop \
     Quotes.png \
     qml/pages/AboutPage.qml \
     qml/pages/QuotePage.qml \
     qml/pages/SearchPage.qml
+
+quotes.files = quotesdb/*.json.gz
+quotes.path = /usr/share/$${TARGET}
+
+INSTALLS += quotes
 
 # to disable building translations every time, comment out the
 # following CONFIG line
