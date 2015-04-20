@@ -15,9 +15,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifdef QT_QML_DEBUG
 #include <QtQuick>
-#endif
 
 #include <sailfishapp.h>
 #include "quotecontroller.h"
@@ -27,8 +25,8 @@ int main(int argc, char *argv[]) {
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
     QSharedPointer<QQuickView> view(SailfishApp::createView());
 
-    QuoteDB::getQuoteDB()->readQuotes();
-    QuoteController controller(view);
+    // QuoteDB::getQuoteDB()->readQuotes();
+    // QuoteController controller(view);
 
     view->rootContext()->setContextProperty("quoteController", &controller);
     view->setSource(SailfishApp::pathTo("qml/Quotes.qml"));

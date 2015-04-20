@@ -96,6 +96,12 @@ Page {
 
         model: quoteModel
 
-        VerticalScrollDecorator { }
+        onFlickStarted: {
+            Qt.inputMethod.hide()
+        }
+
+        VerticalScrollDecorator {
+
+        }
     }
 }

@@ -1,6 +1,4 @@
 /*
-  Copyright 2015 Michal Parusinski <mparusinski@gmail.com>
-
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 2 of the License, or
@@ -15,36 +13,26 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef QUOTE_H
-#define QUOTE_H
+import QtQuick 2.0
+import Sailfish.Silica 1.0
 
-#include <QObject>
-#include <QString>
-#include <QSharedPointer>
-#include "idregistry.h"
+Page {
+    backNavigation: false
 
-class Quote {
-public:
-    typedef QSharedPointer<Quote> QuotePtr;
+    Column {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        spacing: 20
 
-    Quote();
+        Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: "Loading Quotes..."
+        }
 
-    Quote(const QString& philosopher, const QString& quote);
-
-    QString philosopher() const;
-
-    QString quote() const;
-
-    u_int32_t uniqueID() const;
-
-private:
-    Q_DISABLE_COPY(Quote)
-
-    QString m_philosopher;
-    QString m_quote;
-    u_int32_t m_uniqueID;
-};
-
-bool quoteptrCompare(Quote::QuotePtr left, Quote::QuotePtr right);
-
-#endif // QUOTE_H
+        BusyIndicator {
+            anchors.horizontalCenter: parent.horizontalCenter
+            size: BusyIndicatorSize.Large
+            running: true
+        }
+    }
+}

@@ -37,3 +37,7 @@ QString Quote::quote() const {
 u_int32_t Quote::uniqueID() const {
     return m_uniqueID;
 }
+
+bool quoteptrCompare(Quote::QuotePtr left, Quote::QuotePtr right) {
+    return left->quote().operator <( right->quote().toLatin1());
+}

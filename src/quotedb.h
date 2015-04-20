@@ -19,16 +19,14 @@
 #define QUOTEDB_H
 
 #include <QObject>
-#include <QMap>
+#include <map>
+#include <vector>
 
 #include "quote.h"
 
 class QuoteDB {
 public:
-    typedef QMap<QString, Quote::QuotePtr> ContainerType;
-    typedef QMapIterator<QString, Quote::QuotePtr> ContainerIteratorType;
-    typedef QMutableMapIterator<QString, Quote::QuotePtr>
-      ContainerMutableIteratorType;
+    typedef std::vector<Quote::QuotePtr> ContainerType;
 
     bool readQuotes();
 
@@ -45,7 +43,7 @@ private:
 
     ContainerType m_quotes;
     bool m_visitorSet;
-    QMap<u_int32_t, Quote::QuotePtr> m_quotesByIDs;
+    std::map<u_int32_t, Quote::QuotePtr> m_quotesByIDs;
     static QuoteDB * instance;
 
     QuoteDB();

@@ -34,7 +34,8 @@ OTHER_FILES += qml/Quotes.qml \
     Quotes.png \
     qml/pages/AboutPage.qml \
     qml/pages/QuotePage.qml \
-    qml/pages/SearchPage.qml
+    qml/pages/SearchPage.qml \
+    qml/pages/Loading.qml
 
 quotes.files = quotesdb/*.json.gz
 quotes.path = /usr/share/$${TARGET}

@@ -23,11 +23,8 @@
 QuoteController::QuoteController(const QSharedPointer<QQuickView>& mainView,
                                  QObject * parent) : QObject(parent) {
     m_mainView = mainView;
-    m_quoteModel = QuoteModelPtr(new QuoteModel());
-    if (QuoteDB::getQuoteDB()->numQuotes() > 0) {
-        loadQuote("0");
-        populateModel();
-    }
+    QQmlContext * rootCtx = m_mainView->rootContext();
+    rootCtx->setContextProperty("quoteModel", QuoteModel::getQuoteModel());
 }
 
 QString QuoteController::getQuote() const {
@@ -39,52 +36,29 @@ QString QuoteController::getPhilosopher() const {
 }
 
 void QuoteController::nextQuote() {
-    if (!m_iteratorForward)
-        m_modelIterator->next();
-
-    if (m_modelIterator->hasNext()) {
-        m_currentQuote = m_modelIterator->next();
-    } else {
-        m_modelIterator->toFront();
-        m_currentQuote = m_modelIterator->next();
-    }
-    m_iteratorForward = true;
+    QuoteModel::getQuoteModel()->circularNext(m_modelIterator);
+    m_currentQuote = *m_modelIterator;
 }
 
 void QuoteController::prevQuote() {
-    if (m_iteratorForward)
-        m_modelIterator->previous();
-
-    if (m_modelIterator->hasPrevious()) {
-        m_currentQuote = m_modelIterator->previous();
-    } else {
-        m_modelIterator->toBack();
-        m_currentQuote = m_modelIterator->previous();
-    }
-    m_iteratorForward = false;
+    QuoteModel::getQuoteModel()->circularPrev(m_modelIterator);
+    m_currentQuote = *m_modelIterator;
 }
 
 int QuoteController::quoteNumber() const {
-    return m_quoteModel->rowCount();
+    return QuoteModel::getQuoteModel()->rowCount();
 }
 
 void QuoteController::filterUsingSearchString(const QString& searchString) {
     // dead stupid
-    m_quoteModel->repopulateQuotes();
-    m_quoteModel->filterUsing(searchString);
-}
-
-void QuoteController::populateModel() {
-    QQmlContext * rootCtx = m_mainView->rootContext();
-    rootCtx->setContextProperty("quoteModel", &(*m_quoteModel));
-    m_quoteModel->repopulateQuotes();
+    QuoteModel::getQuoteModel()->repopulateQuotes();
+    QuoteModel::getQuoteModel()->filterUsing(searchString);
 }
 
 void QuoteController::loadQuote(const QString& quoteID) {
     u_int32_t realQuoteID = static_cast<u_int32_t>(quoteID.toLongLong());
     m_currentQuote = QuoteDB::getQuoteDB()->getQuoteWithID(realQuoteID);
-    m_modelIterator = m_quoteModel->getIterToQuote(realQuoteID);
-    m_iteratorForward = true;
+    m_modelIterator = QuoteModel::getQuoteModel()->getIterToQuote(realQuoteID);
     if (m_currentQuote.isNull()) {
         qWarning() << "Quote with id " << quoteID << "not found";
     }

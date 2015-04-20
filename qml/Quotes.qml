@@ -19,6 +19,6 @@ import "pages"
 
 ApplicationWindow
 {
-    initialPage: Component { SearchPage { } }
+    initialPage: Component { Loading { } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 }

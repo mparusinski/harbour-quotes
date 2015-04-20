@@ -56,11 +56,7 @@ private:
 
     QSharedPointer<QQuickView> m_mainView;
     Quote::QuotePtr m_currentQuote;
-    QuoteModelPtr m_quoteModel;
-    QuoteModel::ModelIteratorPtr m_modelIterator;
-    bool m_iteratorForward;
-
-    void populateModel();
+    std::list<Quote::QuotePtr>::iterator m_modelIterator;
 };
 
 #endif // QUOTECONTROLLER_H

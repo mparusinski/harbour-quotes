@@ -18,6 +18,8 @@
 #include "quotemodel.h"
 #include <QDebug>
 
+QuoteModel * QuoteModel::instance = NULL;
+
 QuoteModel::QuoteModel(QObject *parent)
     : QAbstractListModel(parent) {
     m_roles[QuoteRole] = "quote";
@@ -29,38 +31,53 @@ QuoteModel::QuoteModel(QObject *parent)
 QuoteModel::~QuoteModel() {
 }
 
+QuoteModel* QuoteModel::getQuoteModel() {
+    if (instance == NULL) {
+        instance = new QuoteModel;
+    }
+
+    return instance;
+}
+
+void QuoteModel::pushQuote(const Quote::QuotePtr& quote) {
+    beginInsertRows(QModelIndex(), m_quoteNum, m_quoteNum);
+    m_quotesVisible.push_back(quote);
+    m_quoteNum++;
+    endInsertRows();
+}
+
 void QuoteModel::repopulateQuotes() {
     clearModel();
     QuoteDB* quoteDB = QuoteDB::getQuoteDB();
     QuoteDB::ContainerType quotes = quoteDB->getQuotes();
     int newSize = quotes.size();
     beginInsertRows(QModelIndex(), 0, newSize - 1);
-    QuoteDB::ContainerIteratorType iter(quotes);
-    while (iter.hasNext()) {
-        iter.next();
-        m_quotesVisible.append(iter.value());
+    int index = 0;
+    for (QuoteDB::ContainerType::iterator iter = quotes.begin(); iter != quotes.end(); ++iter) {
+        m_quotesVisible.push_back(*iter);
+        m_rowsToQuotes[index++] = *iter;
     }
     m_quoteNum = newSize;
     endInsertRows();
 }
 
-QuoteModel::ModelIteratorPtr QuoteModel::getIterToQuote(
-  u_int32_t quoteID) const {
-    ModelIteratorPtr modelIterator(
-      new QListIterator<Quote::QuotePtr>(m_quotesVisible));
-    while (modelIterator->hasNext()) {
-        const Quote::QuotePtr& quote = modelIterator->next();
+std::list<Quote::QuotePtr>::iterator QuoteModel::getIterToQuote(
+  u_int32_t quoteID) {
+    std::list<Quote::QuotePtr>::iterator iter = m_quotesVisible.begin();
+    for ( ; iter != m_quotesVisible.end(); ++iter) {
+        const Quote::QuotePtr& quote = *iter;
         if (quote->uniqueID() == quoteID) {
-            return modelIterator;
+            return iter;
         }
     }
-    return modelIterator;
+    return iter;
 }
 
 void QuoteModel::clearModel() {
     if (m_quoteNum > 0) {
         beginRemoveRows(QModelIndex(), 0, m_quoteNum - 1);
         m_quotesVisible.clear();
+        m_rowsToQuotes.clear();
         m_quoteNum = 0;
         endRemoveRows();
     }
@@ -78,10 +95,9 @@ void QuoteModel::filterUsing(const QString& searchString) {
 
 void QuoteModel::filterUsingToken(const QString& tokenString) {
     int index = -1;
-    QMutableListIterator<Quote::QuotePtr> iter(m_quotesVisible);
-    while (iter.hasNext()) {
-        iter.next();
-        const Quote::QuotePtr& elem = iter.value();
+    std::list<Quote::QuotePtr> newQuotesVisible;
+    for (std::list<Quote::QuotePtr>::iterator iter = m_quotesVisible.begin(); iter != m_quotesVisible.end(); ++iter) {
+        const Quote::QuotePtr& elem = *iter;
         index++;
         const QString & philosopher = elem->philosopher();
         const QString & quote = elem->quote();
@@ -90,12 +106,15 @@ void QuoteModel::filterUsingToken(const QString& tokenString) {
           || quote.contains(tokenString, Qt::CaseInsensitive);
         if (!strContained) {
             beginRemoveRows(QModelIndex(), index, index);
-            iter.remove();
             m_quoteNum--;
             endRemoveRows();
             index--;
+        } else {
+           newQuotesVisible.push_back(elem);
+           m_rowsToQuotes[index] = elem;
         }
     }
+    m_quotesVisible = newQuotesVisible;
 }
 
 int QuoteModel::rowCount(const QModelIndex &parent) const {
@@ -104,12 +123,13 @@ int QuoteModel::rowCount(const QModelIndex &parent) const {
 
 QVariant QuoteModel::data(const QModelIndex &index, int role) const {
     int rowNum = index.row();
+    Quote::QuotePtr elem = m_rowsToQuotes.at(rowNum);
     if (role == QuoteRole) {
-        return QVariant::fromValue(m_quotesVisible[rowNum]->quote());
+        return QVariant::fromValue(elem->quote());
     } else if (role == PhilosopherRole) {
-        return QVariant::fromValue(m_quotesVisible[rowNum]->philosopher());
+        return QVariant::fromValue(elem->philosopher());
     } else if (role == QuoteIDRole) {
-        u_int32_t quoteID = m_quotesVisible[rowNum]->uniqueID();
+        u_int32_t quoteID = elem->uniqueID();
         return QVariant::fromValue(QString::number(quoteID));
     } else {
         qWarning() << "UI is trying to access an unknown property of quote";
@@ -121,10 +141,25 @@ QHash<int, QByteArray> QuoteModel::roleNames() const {
     return m_roles;
 }
 
+void QuoteModel::circularNext(
+        std::list<Quote::QuotePtr>::iterator& iter) {
+    ++iter;
+    if (iter == m_quotesVisible.end()) {
+        iter = m_quotesVisible.begin();
+    }
+}
+
+void QuoteModel::circularPrev(
+        std::list<Quote::QuotePtr>::iterator& iter) {
+    if (iter == m_quotesVisible.begin()) {
+        iter = m_quotesVisible.end();
+    }
+    --iter;
+}
+
 void QuoteModel::printAllQuotes() const {
-    QListIterator<Quote::QuotePtr> iter(m_quotesVisible);
-    while (iter.hasNext()) {
-        Quote::QuotePtr quote = iter.next();
+    for (std::list<Quote::QuotePtr>::const_iterator iter = m_quotesVisible.begin(); iter != m_quotesVisible.end(); ++iter) {
+        Quote::QuotePtr quote = *iter;
         qDebug() << quote->quote();
     }
 }

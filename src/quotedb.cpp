@@ -21,12 +21,16 @@
 
 #include <QFile>
 #include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include <QDebug>
 #include <QStringList>
 #include <QDir>
 
-#include <vector>
 #include <zlib.h>
+#include <algorithm>
+
+#include "quotemodel.h"
 
 QuoteDB * QuoteDB::instance = NULL;
 
@@ -56,6 +60,8 @@ bool QuoteDB::readQuotes() {
             return false;
         }
     }
+    std::sort(m_quotes.begin(), m_quotes.end(), quoteptrCompare);
+    QuoteModel::getQuoteModel()->repopulateQuotes();
     return true;
 }
 
@@ -124,8 +130,8 @@ bool QuoteDB::readQuotesFile(QUrl pathToFile) {
         QString philosopher = jsonQuoteObj["philosopher"].toString();
 
         Quote::QuotePtr quote(new Quote(philosopher, quoteText));
-        m_quotes.insert(quoteText, quote);  // some way to guarantee sortedness
-        m_quotesByIDs.insert(quote->uniqueID(), quote);
+        m_quotes.push_back(quote);
+        m_quotesByIDs[quote->uniqueID()] = quote;
     }
 
     return true;
@@ -136,11 +142,13 @@ QuoteDB::ContainerType& QuoteDB::getQuotes() {
 }
 
 Quote::QuotePtr QuoteDB::getQuoteWithID(u_int32_t id) const {
-    QMap<u_int32_t, Quote::QuotePtr>::const_iterator iter
+    std::map<u_int32_t, Quote::QuotePtr>::const_iterator iter
       = m_quotesByIDs.find(id);
     if (iter != m_quotesByIDs.end()) {
-        return iter.value();
+        return iter->second;
     } else {
         return Quote::QuotePtr();
     }
 }
+
+
