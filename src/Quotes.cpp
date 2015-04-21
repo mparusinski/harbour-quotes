@@ -23,12 +23,11 @@
 
 int main(int argc, char *argv[]) {
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
+    qmlRegisterType<QuoteEngineQMLInterface>("com.parusinskimichal.quotes.engine", 1, 0, "QuoteEngineInterface");
     QSharedPointer<QQuickView> view(SailfishApp::createView());
+    QuoteController::getQuoteController()->setMainView(view);
 
-    // QuoteDB::getQuoteDB()->readQuotes();
-    // QuoteController controller(view);
-
-    view->rootContext()->setContextProperty("quoteController", &controller);
+    view->rootContext()->setContextProperty("quoteController", QuoteController::getQuoteController());
     view->setSource(SailfishApp::pathTo("qml/Quotes.qml"));
     view->show();
 

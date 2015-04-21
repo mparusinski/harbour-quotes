@@ -18,19 +18,50 @@
 #ifndef QUOTEDB_H
 #define QUOTEDB_H
 
-#include <QObject>
+#include <QThread>
+#include <QSharedPointer>
 #include <map>
 #include <vector>
 
 #include "quote.h"
+#include "quotecontroller.h"
 
-class QuoteDB {
+class QuoteController;
+
+class QuotesReaderThread : public QThread {
+    Q_OBJECT
 public:
     typedef std::vector<Quote::QuotePtr> ContainerType;
 
+    QuotesReaderThread(QSharedPointer<ContainerType>& quotes,
+                       QSharedPointer< std::map<u_int32_t, Quote::QuotePtr> >& quotesByIDs);
+
     bool readQuotes();
 
-    ContainerType& getQuotes();
+    bool readQuotesFile(QUrl filepath);
+
+    QString readRegularFile(QUrl& pathToFile);
+
+    QString readZFile(QUrl& pathToFile);
+
+    void run() Q_DECL_OVERRIDE;
+
+signals:
+    void resultReady();
+
+private:
+    QSharedPointer<ContainerType> m_quotes;
+    QSharedPointer< std::map<u_int32_t, Quote::QuotePtr> > m_quotesByIDs;
+};
+
+class QuoteDB : public QObject {
+    Q_OBJECT
+public:
+    typedef std::vector<Quote::QuotePtr> ContainerType;
+
+    void readQuotes(QuoteController* quoteController);
+
+    QSharedPointer<ContainerType>& getQuotes();
 
     static QuoteDB* getQuoteDB();
 
@@ -38,21 +69,19 @@ public:
 
     int numQuotes() const;
 
+public slots:
+    void quotesReady();
+
 private:
     Q_DISABLE_COPY(QuoteDB)
 
-    ContainerType m_quotes;
-    bool m_visitorSet;
-    std::map<u_int32_t, Quote::QuotePtr> m_quotesByIDs;
+    QSharedPointer<ContainerType> m_quotes;
+    QSharedPointer< std::map<u_int32_t, Quote::QuotePtr> > m_quotesByIDs;
+    QuotesReaderThread * m_readerThread;
+    QuoteController * m_quoteController;
     static QuoteDB * instance;
 
-    QuoteDB();
-
-    bool readQuotesFile(QUrl filepath);
-
-    QString readRegularFile(QUrl& pathToFile);
-
-    QString readZFile(QUrl& pathToFile);
+    QuoteDB(QObject* parent = 0);
 };
 
 #endif  // QUOTEDB_H

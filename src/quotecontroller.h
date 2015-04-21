@@ -18,6 +18,7 @@
 #ifndef QUOTECONTROLLER_H
 #define QUOTECONTROLLER_H
 
+#include <set>
 #include <QObject>
 #include <QQuickView>
 
@@ -25,13 +26,32 @@
 #include "quotedb.h"
 #include "quotemodel.h"
 
+class QuoteEngineQMLInterface : public QObject {
+    Q_OBJECT
+public:
+    explicit QuoteEngineQMLInterface(QObject * parent = 0);
+
+    virtual ~QuoteEngineQMLInterface();
+
+    void emitSignalDoneReadingQuotes() const;
+
+signals:
+    void doneReadingQuotes() const;
+
+private:
+
+};
+
 class QuoteController : public QObject {
     Q_OBJECT
 public:
-    typedef QSharedPointer<QuoteModel> QuoteModelPtr;
+    void setMainView(const QSharedPointer<QQuickView>& mainView);
 
-    explicit QuoteController(const QSharedPointer<QQuickView>& mainView,
-      QObject* parent = 0);
+    static QuoteController* getQuoteController();
+
+    void addQMLInterface(QuoteEngineQMLInterface* interface);
+
+    void removeQMLInterface(QuoteEngineQMLInterface* interface);
 
     Q_INVOKABLE void loadQuote(const QString& quoteID);
 
@@ -47,6 +67,14 @@ public:
 
     Q_INVOKABLE int quoteNumber() const;
 
+    Q_INVOKABLE void readQuotesDB();
+
+    Q_INVOKABLE void setupQuoteModel() const;
+
+    Q_INVOKABLE void buildSearchPageQuoteModel() const;
+
+    void readingQuotesDone() const;
+
 signals:
 
 public slots:
@@ -54,9 +82,14 @@ public slots:
 private:
     Q_DISABLE_COPY(QuoteController)
 
+    explicit QuoteController(QObject* parent = 0);
+
     QSharedPointer<QQuickView> m_mainView;
     Quote::QuotePtr m_currentQuote;
     std::list<Quote::QuotePtr>::iterator m_modelIterator;
+    std::set<QuoteEngineQMLInterface*> m_interfaces;
+
+    static QuoteController* instance;
 };
 
 #endif // QUOTECONTROLLER_H

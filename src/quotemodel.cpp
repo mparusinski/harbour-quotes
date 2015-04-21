@@ -49,11 +49,11 @@ void QuoteModel::pushQuote(const Quote::QuotePtr& quote) {
 void QuoteModel::repopulateQuotes() {
     clearModel();
     QuoteDB* quoteDB = QuoteDB::getQuoteDB();
-    QuoteDB::ContainerType quotes = quoteDB->getQuotes();
-    int newSize = quotes.size();
+    QSharedPointer<QuoteDB::ContainerType> quotes = quoteDB->getQuotes();
+    int newSize = quotes->size();
     beginInsertRows(QModelIndex(), 0, newSize - 1);
     int index = 0;
-    for (QuoteDB::ContainerType::iterator iter = quotes.begin(); iter != quotes.end(); ++iter) {
+    for (QuoteDB::ContainerType::iterator iter = quotes->begin(); iter != quotes->end(); ++iter) {
         m_quotesVisible.push_back(*iter);
         m_rowsToQuotes[index++] = *iter;
     }

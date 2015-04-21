@@ -103,5 +103,9 @@ Page {
         VerticalScrollDecorator {
 
         }
+
+        Component.onCompleted: {
+            quoteController.buildSearchPageQuoteModel();
+        }
     }
 }

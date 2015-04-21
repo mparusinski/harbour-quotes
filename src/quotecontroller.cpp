@@ -17,14 +17,47 @@
 
 #include "quotecontroller.h"
 
+#include <sailfishapp.h>
 #include <QDebug>
 #include <QQmlContext>
 
-QuoteController::QuoteController(const QSharedPointer<QQuickView>& mainView,
-                                 QObject * parent) : QObject(parent) {
+QuoteController* QuoteController::instance = NULL;
+
+QuoteEngineQMLInterface::QuoteEngineQMLInterface(QObject * parent)
+    : QObject(parent) {
+    QuoteController::getQuoteController()->addQMLInterface(this);
+}
+
+QuoteEngineQMLInterface::~QuoteEngineQMLInterface() {
+    QuoteController::getQuoteController()->removeQMLInterface(this);
+}
+
+void QuoteEngineQMLInterface::emitSignalDoneReadingQuotes() const {
+    emit doneReadingQuotes();
+}
+
+void QuoteController::setMainView(const QSharedPointer<QQuickView>& mainView) {
     m_mainView = mainView;
-    QQmlContext * rootCtx = m_mainView->rootContext();
-    rootCtx->setContextProperty("quoteModel", QuoteModel::getQuoteModel());
+}
+
+QuoteController* QuoteController::getQuoteController() {
+    if (instance == NULL) {
+        instance = new QuoteController;
+    }
+
+    return instance;
+}
+
+QuoteController::QuoteController(QObject * parent) : QObject(parent) {
+    // Nothing to do
+}
+
+void QuoteController::addQMLInterface(QuoteEngineQMLInterface* interface) {
+    m_interfaces.insert(interface);
+}
+
+void QuoteController::removeQMLInterface(QuoteEngineQMLInterface* interface) {
+    m_interfaces.insert(interface);
 }
 
 QString QuoteController::getQuote() const {
@@ -62,4 +95,28 @@ void QuoteController::loadQuote(const QString& quoteID) {
     if (m_currentQuote.isNull()) {
         qWarning() << "Quote with id " << quoteID << "not found";
     }
+}
+
+void QuoteController::buildSearchPageQuoteModel() const {
+    QuoteModel::getQuoteModel()->repopulateQuotes();
+}
+
+void QuoteController::readQuotesDB() {
+    // Do this in a thread
+    QuoteDB::getQuoteDB()->readQuotes(this);
+}
+
+void QuoteController::readingQuotesDone() const {
+    qDebug() << "Reading quotes is done";
+    for (std::set<QuoteEngineQMLInterface*>::iterator iter = m_interfaces.begin(); iter != m_interfaces.end(); ++iter) {
+        QuoteEngineQMLInterface* interface = *iter;
+        if (interface != NULL) {
+            interface->emitSignalDoneReadingQuotes();
+        }
+    }
+}
+
+void QuoteController::setupQuoteModel() const {
+    QQmlContext * rootCtx = m_mainView->rootContext();
+    rootCtx->setContextProperty("quoteModel", QuoteModel::getQuoteModel());
 }

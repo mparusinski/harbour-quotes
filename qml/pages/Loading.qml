@@ -16,10 +16,13 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
+import com.parusinskimichal.quotes.engine 1.0
+
 Page {
     backNavigation: false
 
     Column {
+        id: loadingPage
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         spacing: 20
@@ -30,9 +33,23 @@ Page {
         }
 
         BusyIndicator {
+            id: busyIndicator
             anchors.horizontalCenter: parent.horizontalCenter
             size: BusyIndicatorSize.Large
             running: true
         }
+
+        Component.onCompleted: {
+            quoteController.setupQuoteModel();
+            quoteController.readQuotesDB();
+        }
+
+        QuoteEngineInterface {
+            onDoneReadingQuotes: {
+                busyIndicator.running = false;
+                pageStack.replace(Qt.resolvedUrl('SearchPage.qml'), {}, PageStackAction.Immediate);
+            }
+        }
+
     }
 }
