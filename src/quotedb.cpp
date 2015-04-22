@@ -30,8 +30,6 @@
 #include <zlib.h>
 #include <algorithm>
 
-#include "quotemodel.h"
-
 QuotesReaderThread::QuotesReaderThread() {
     m_quotes = QuotesDBContainerPtr(new QuotesDBContainerType);
 }
@@ -147,6 +145,7 @@ int QuoteDB::numQuotes() const {
 }
 
 void QuoteDB::threadFinishedReadingQuotes() {
+    m_quotes = m_readerThread->retrieveQuotes();
     emit quotesRead();
 }
 

@@ -48,7 +48,8 @@ InternalModelFacade* InternalModelFacade::getInternalModelFacade() {
     return instance;
 }
 
-InternalModelFacade::InternalModelFacade(QObject * parent) : QObject(parent), m_quotesDB(this) {
+InternalModelFacade::InternalModelFacade(QObject * parent)
+    : QObject(parent), m_quotesDB(this), m_searchPageListModel(this) {
     // Nothing to do
 }
 
@@ -69,33 +70,32 @@ QString InternalModelFacade::getPhilosopher() const {
 }
 
 void InternalModelFacade::nextQuote() {
-    QuoteModel::getQuoteModel()->circularNext(m_modelIterator);
+    m_searchPageListModel.circularNext(m_modelIterator);
     m_currentQuote = *m_modelIterator;
 }
 
 void InternalModelFacade::prevQuote() {
-    QuoteModel::getQuoteModel()->circularPrev(m_modelIterator);
+    m_searchPageListModel.circularPrev(m_modelIterator);
     m_currentQuote = *m_modelIterator;
 }
 
 int InternalModelFacade::quoteNumber() const {
-    return QuoteModel::getQuoteModel()->rowCount();
+    return m_searchPageListModel.rowCount();
 }
 
 void InternalModelFacade::filterUsingSearchString(const QString& searchString) {
-    // dead stupid
-    QuoteModel::getQuoteModel()->repopulateQuotes(m_quotesDB.getQuotes());
-    QuoteModel::getQuoteModel()->filterUsing(searchString);
+    m_searchPageListModel.repopulateQuotes(m_quotesDB.getQuotes());
+    m_searchPageListModel.filterUsing(searchString);
 }
 
 void InternalModelFacade::loadQuote(const QString& quoteID) {
     u_int32_t realQuoteID = static_cast<u_int32_t>(quoteID.toLongLong());
     m_currentQuote = getQuoteWithID(realQuoteID);
-    m_modelIterator = QuoteModel::getQuoteModel()->getIterToQuote(realQuoteID);
+    m_modelIterator = m_searchPageListModel.getIterToQuote(realQuoteID);
 }
 
-void InternalModelFacade::buildSearchPageQuoteModel() const {
-    QuoteModel::getQuoteModel()->repopulateQuotes(m_quotesDB.getQuotes());
+void InternalModelFacade::buildSearchPageListModel() {
+    m_searchPageListModel.repopulateQuotes(m_quotesDB.getQuotes());
 }
 
 void InternalModelFacade::aynscReadQuotesDB() {
@@ -113,7 +113,7 @@ void InternalModelFacade::readingQuotesDone() const {
     }
 }
 
-void InternalModelFacade::setupQuoteModel() const {
+void InternalModelFacade::setupSearchPageListModel() {
     QQmlContext * rootCtx = m_mainView->rootContext();
-    rootCtx->setContextProperty("quoteModel", QuoteModel::getQuoteModel());
+    rootCtx->setContextProperty("searchPageListModel", &m_searchPageListModel);
 }

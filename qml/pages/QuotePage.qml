@@ -19,11 +19,11 @@ import Sailfish.Silica 1.0
 
 Page {
     function quoteText() {
-        return "\t" + quoteController.getQuote();
+        return "\t" + internalModel.getQuote();
     }
 
     function philosopherText() {
-        return "<i>" + quoteController.getPhilosopher() + "</i>"
+        return "<i>" + internalModel.getPhilosopher() + "</i>"
     }
 
     id: page
@@ -35,11 +35,11 @@ Page {
         // PullDownMenu and PushUpMenu must be declared in SilicaFlickable, SilicaListView or SilicaGridView
         PullDownMenu {
             id: dropdown
-            visible: quoteController.quoteNumber() > 1
+            visible: internalModel.quoteNumber() > 1
             MenuItem {
                 text: qsTr("Previous quote")
                 onClicked: {
-                    quoteController.prevQuote()
+                    internalModel.prevQuote()
                     quoteField.text = quoteText()
                     philosopherField.text = philosopherText()
                 }
@@ -48,7 +48,7 @@ Page {
             MenuItem {
                 text: qsTr("Next quote")
                 onClicked: {
-                    quoteController.nextQuote()
+                    internalModel.nextQuote()
                     quoteField.text = quoteText()
                     philosopherField.text = philosopherText()
                 }

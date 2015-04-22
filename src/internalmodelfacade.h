@@ -24,7 +24,7 @@
 
 #include "quote.h"
 #include "quotedb.h"
-#include "quotemodel.h"
+#include "searchpagelistmodel.h"
 
 class InternalModelWindow : public QObject {
     Q_OBJECT
@@ -69,9 +69,9 @@ public:
 
     Q_INVOKABLE void aynscReadQuotesDB();
 
-    Q_INVOKABLE void setupQuoteModel() const;
+    Q_INVOKABLE void setupSearchPageListModel();
 
-    Q_INVOKABLE void buildSearchPageQuoteModel() const;
+    Q_INVOKABLE void buildSearchPageListModel();
 
 signals:
 
@@ -88,6 +88,7 @@ private:
     std::list<Quote::QuotePtr>::iterator m_modelIterator;
     std::set<InternalModelWindow*> m_interfaces;
     QuoteDB m_quotesDB;
+    SearchPageListModel m_searchPageListModel;
 
     static InternalModelFacade* instance;
 };

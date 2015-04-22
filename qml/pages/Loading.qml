@@ -40,8 +40,8 @@ Page {
         }
 
         Component.onCompleted: {
-            internalModel.setupQuoteModel();
-            internalModel.readQuotesDB();
+            internalModel.setupSearchPageListModel();
+            internalModel.aynscReadQuotesDB();
         }
 
         InternalModelWindow {

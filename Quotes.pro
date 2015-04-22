@@ -18,9 +18,9 @@ PKGCONFIG += zlib
 SOURCES += src/Quotes.cpp \
     src/quote.cpp \
     src/quotedb.cpp \
-    src/quotemodel.cpp \
     src/internalmodelfacade.cpp \
-    src/quotesidregistry.cpp
+    src/quotesidregistry.cpp \
+    src/searchpagelistmodel.cpp
 
 OTHER_FILES += qml/Quotes.qml \
     qml/cover/CoverPage.qml \
@@ -50,8 +50,8 @@ TRANSLATIONS += translations/Quotes-de.ts
 HEADERS += \
     src/quote.h \
     src/quotedb.h \
-    src/quotemodel.h \
     src/internalmodelfacade.h \
-    src/quotesidregistry.h
+    src/quotesidregistry.h \
+    src/searchpagelistmodel.h
 
 

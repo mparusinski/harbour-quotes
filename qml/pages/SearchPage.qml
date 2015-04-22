@@ -49,7 +49,7 @@ Page {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        quoteController.loadQuote(quoteID);
+                        internalModel.loadQuote(quoteID);
                         pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
                     }
                 }
@@ -66,7 +66,7 @@ Page {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        quoteController.loadQuote(quoteID);
+                        internalModel.loadQuote(quoteID);
                         pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
                     }
                 }
@@ -85,7 +85,7 @@ Page {
                 placeholderText: "Search"
 
                 onTextChanged: {
-                    quoteController.filterUsingSearchString(text);
+                    internalModel.filterUsingSearchString(text);
                 }
 
                 Keys.onReturnPressed: {
@@ -94,7 +94,7 @@ Page {
             }
         }
 
-        model: quoteModel
+        model: searchPageListModel
 
         onFlickStarted: {
             Qt.inputMethod.hide()
@@ -105,7 +105,7 @@ Page {
         }
 
         Component.onCompleted: {
-            internalModel.buildSearchPageQuoteModel();
+            internalModel.buildSearchPageListModel();
         }
     }
 }

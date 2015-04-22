@@ -1,5 +1,5 @@
-#ifndef QUOTEMODEL_H
-#define QUOTEMODEL_H
+#ifndef SearchPageListModel_H
+#define SearchPageListModel_H
 
 #include "quote.h"
 #include "quotedb.h"
@@ -8,7 +8,7 @@
 #include <list>
 #include <QModelIndex>
 
-class QuoteModel : public QAbstractListModel
+class SearchPageListModel : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -19,9 +19,9 @@ public:
         QuoteIDRole
     };
 
-    virtual ~QuoteModel();
+    virtual ~SearchPageListModel();
 
-    static QuoteModel * getQuoteModel();
+    SearchPageListModel(QObject *parent = 0);
 
     void pushQuote(const Quote::QuotePtr& quote);
 
@@ -45,15 +45,11 @@ public:
     void printAllQuotes() const;
 
 private:
-    Q_DISABLE_COPY(QuoteModel)
-
-    QuoteModel(QObject *parent = 0);
+    Q_DISABLE_COPY(SearchPageListModel)
 
     void clearModel();
 
     void filterUsingToken(const QString& tokenString);
-
-    static QuoteModel * instance;
 
     QHash<int, QByteArray> m_roles;
     std::list<Quote::QuotePtr> m_quotesVisible;
@@ -62,4 +58,4 @@ private:
 
 };
 
-#endif // QUOTEMODEL_H
+#endif // SearchPageListModel_H
