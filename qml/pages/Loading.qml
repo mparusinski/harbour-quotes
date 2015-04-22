@@ -40,11 +40,11 @@ Page {
         }
 
         Component.onCompleted: {
-            quoteController.setupQuoteModel();
-            quoteController.readQuotesDB();
+            internalModel.setupQuoteModel();
+            internalModel.readQuotesDB();
         }
 
-        QuoteEngineInterface {
+        InternalModelWindow {
             onDoneReadingQuotes: {
                 busyIndicator.running = false;
                 pageStack.replace(Qt.resolvedUrl('SearchPage.qml'), {}, PageStackAction.Immediate);

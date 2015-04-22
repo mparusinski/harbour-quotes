@@ -13,11 +13,11 @@ Name:       Quotes
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Quotes display quotes from philosophers
-Version:    0.3
+Version:    0.4
 Release:    1
 Group:      Qt/Qt
 License:    GPLv2
-URL:        http://example.org/
+URL:        https://github.com/mparusinski/Quotes
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  Quotes.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9

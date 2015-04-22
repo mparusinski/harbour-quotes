@@ -15,30 +15,38 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#include "idregistry.h"
+#include "quotesidregistry.h"
 #include <QDebug>
 
-IDRegistry* IDRegistry::instance = NULL;
+QuotesIDRegistry* QuotesIDRegistry::instance = NULL;
 
-IDRegistry::IDRegistry(QObject *parent) :
-  QObject(parent) {
+QuotesIDRegistry::QuotesIDRegistry() {
+    m_nextIDToTry = 1;
 }
 
-IDRegistry * IDRegistry::getRegistry() {
+QuotesIDRegistry * QuotesIDRegistry::getRegistry() {
     if (instance == NULL) {
-        instance = new IDRegistry;
+        instance = new QuotesIDRegistry;
     }
     return instance;
 }
 
-u_int32_t IDRegistry::getNextID() {
-    for (u_int32_t id = 0;  id < UINT_MAX; id++) {
-        if (!m_usedIDs.contains(id)) {
-            m_usedIDs.insert(id);
-            return id;
-        }
-    }
+u_int32_t QuotesIDRegistry::registerQuote(const QuotesIDRegistry::QuotePtr& quote) {
+    u_int32_t validID = findValidID();
+    m_usedIDs.insert(validID);
+    m_idRegistry[validID] = quote;
+    return validID;
+}
 
-    qCritical() << "UNABLE TO FIND AN ID";
-    return 0;
+u_int32_t QuotesIDRegistry::findValidID() {
+    if (m_nextIDToTry == UINT_MAX) {
+        qCritical() << "UNABLE TO FIND AN ID";
+        return 0;
+    }
+    m_nextIDToTry++;
+    return m_nextIDToTry;
+}
+
+QuotesIDRegistry::QuotePtr QuotesIDRegistry::getQuoteWithID(const u_int32_t idNum) {
+    return m_idRegistry[idNum];
 }

@@ -16,11 +16,11 @@ CONFIG += sailfishapp
 PKGCONFIG += zlib
 
 SOURCES += src/Quotes.cpp \
-    src/quotecontroller.cpp \
     src/quote.cpp \
     src/quotedb.cpp \
     src/quotemodel.cpp \
-    src/idregistry.cpp
+    src/internalmodelfacade.cpp \
+    src/quotesidregistry.cpp
 
 OTHER_FILES += qml/Quotes.qml \
     qml/cover/CoverPage.qml \
@@ -29,7 +29,7 @@ OTHER_FILES += qml/Quotes.qml \
     rpm/Quotes.spec \
     rpm/Quotes.yaml \
     translations/*.ts \
-    quotesdb/*.json.gz \
+    quotesdb/*.json \
     Quotes.desktop \
     Quotes.png \
     qml/pages/AboutPage.qml \
@@ -37,7 +37,7 @@ OTHER_FILES += qml/Quotes.qml \
     qml/pages/SearchPage.qml \
     qml/pages/Loading.qml
 
-quotes.files = quotesdb/*.json.gz
+quotes.files = quotesdb/*.json
 quotes.path = /usr/share/$${TARGET}
 
 INSTALLS += quotes
@@ -48,10 +48,10 @@ CONFIG += sailfishapp_i18n
 TRANSLATIONS += translations/Quotes-de.ts
 
 HEADERS += \
-    src/quotecontroller.h \
     src/quote.h \
     src/quotedb.h \
     src/quotemodel.h \
-    src/idregistry.h
+    src/internalmodelfacade.h \
+    src/quotesidregistry.h
 
 

@@ -25,7 +25,7 @@ public:
 
     void pushQuote(const Quote::QuotePtr& quote);
 
-    void repopulateQuotes();
+    void repopulateQuotes(QuotesDBContainerPtr quotes);
 
     void filterUsing(const QString& searchString);
 

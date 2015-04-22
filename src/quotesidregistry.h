@@ -15,28 +15,44 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef IDREGISTRY_H
-#define IDREGISTRY_H
+#ifndef QUOTESIDREGISTRY_H
+#define QUOTESIDREGISTRY_H
 
-#include <QObject>
-#include <QSet>
+#include <set>
+#include <map>
+#include <QSharedPointer>
 
-class IDRegistry : public QObject {
-  
-    Q_OBJECT
+#include "quote.h"
+
+class Quote;
+
+class QuotesIDRegistry {
 
 public:
-    static IDRegistry* getRegistry();
-    u_int32_t getNextID();
+    typedef QSharedPointer<Quote> QuotePtr;
 
-signals:
+    typedef std::set<u_int32_t> UsedIDsSetType;
 
-public slots:
+    typedef std::map<u_int32_t, QuotePtr> QuotesMapType;
+
+    static QuotesIDRegistry* getRegistry();
+
+    u_int32_t registerQuote(const QuotePtr& quote);
+
+    QuotePtr getQuoteWithID(const u_int32_t idNum);
 
 private:
-    static IDRegistry * instance;
-    explicit IDRegistry(QObject *parent = 0);
-    QSet<u_int32_t> m_usedIDs;
+    static QuotesIDRegistry * instance;
+
+    explicit QuotesIDRegistry();
+
+    u_int32_t findValidID();
+
+    u_int32_t m_nextIDToTry;
+
+    UsedIDsSetType m_usedIDs;
+
+    QuotesMapType m_idRegistry;
 };
 
-#endif // IDREGISTRY_H
+#endif // QUOTESIDREGISTRY_H

@@ -18,16 +18,16 @@
 #include <QtQuick>
 
 #include <sailfishapp.h>
-#include "quotecontroller.h"
+#include "internalmodelfacade.h"
 #include "quotedb.h"
 
 int main(int argc, char *argv[]) {
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
-    qmlRegisterType<QuoteEngineQMLInterface>("com.parusinskimichal.quotes.engine", 1, 0, "QuoteEngineInterface");
+    qmlRegisterType<InternalModelWindow>("com.parusinskimichal.quotes.engine", 1, 0, "InternalModelWindow");
     QSharedPointer<QQuickView> view(SailfishApp::createView());
-    QuoteController::getQuoteController()->setMainView(view);
+    InternalModelFacade::getInternalModelFacade()->setMainView(view);
 
-    view->rootContext()->setContextProperty("quoteController", QuoteController::getQuoteController());
+    view->rootContext()->setContextProperty("internalModel", InternalModelFacade::getInternalModelFacade());
     view->setSource(SailfishApp::pathTo("qml/Quotes.qml"));
     view->show();
 

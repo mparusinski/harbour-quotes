@@ -24,64 +24,56 @@
 #include <vector>
 
 #include "quote.h"
-#include "quotecontroller.h"
 
-class QuoteController;
+typedef std::vector<Quote::QuotePtr> QuotesDBContainerType;
+typedef QSharedPointer< QuotesDBContainerType > QuotesDBContainerPtr;
 
 class QuotesReaderThread : public QThread {
     Q_OBJECT
 public:
-    typedef std::vector<Quote::QuotePtr> ContainerType;
-
-    QuotesReaderThread(QSharedPointer<ContainerType>& quotes,
-                       QSharedPointer< std::map<u_int32_t, Quote::QuotePtr> >& quotesByIDs);
+    QuotesReaderThread();
 
     bool readQuotes();
+
+    void run() Q_DECL_OVERRIDE;
+
+    QuotesDBContainerPtr retrieveQuotes() const;
+
+signals:
+    void quotesRead();
+
+private:
+    QuotesDBContainerPtr m_quotes;
 
     bool readQuotesFile(QUrl filepath);
 
     QString readRegularFile(QUrl& pathToFile);
 
     QString readZFile(QUrl& pathToFile);
-
-    void run() Q_DECL_OVERRIDE;
-
-signals:
-    void resultReady();
-
-private:
-    QSharedPointer<ContainerType> m_quotes;
-    QSharedPointer< std::map<u_int32_t, Quote::QuotePtr> > m_quotesByIDs;
 };
 
 class QuoteDB : public QObject {
     Q_OBJECT
 public:
-    typedef std::vector<Quote::QuotePtr> ContainerType;
+    QuoteDB(QObject* parent = 0);
 
-    void readQuotes(QuoteController* quoteController);
+    void asyncDBInit();
 
-    QSharedPointer<ContainerType>& getQuotes();
-
-    static QuoteDB* getQuoteDB();
-
-    Quote::QuotePtr getQuoteWithID(const u_int32_t id) const;
+    QuotesDBContainerPtr getQuotes() const;
 
     int numQuotes() const;
 
 public slots:
-    void quotesReady();
+    void threadFinishedReadingQuotes();
+
+signals:
+    void quotesRead();
 
 private:
     Q_DISABLE_COPY(QuoteDB)
 
-    QSharedPointer<ContainerType> m_quotes;
-    QSharedPointer< std::map<u_int32_t, Quote::QuotePtr> > m_quotesByIDs;
+    QuotesDBContainerPtr m_quotes;
     QuotesReaderThread * m_readerThread;
-    QuoteController * m_quoteController;
-    static QuoteDB * instance;
-
-    QuoteDB(QObject* parent = 0);
 };
 
 #endif  // QUOTEDB_H

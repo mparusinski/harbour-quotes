@@ -32,66 +32,24 @@
 
 #include "quotemodel.h"
 
-QuoteDB * QuoteDB::instance = NULL;
-
-QuoteDB::QuoteDB(QObject * parent) : QObject(parent) {
-    m_quotes = QSharedPointer<ContainerType>(new ContainerType);
-    m_quotesByIDs = QSharedPointer< std::map<u_int32_t, Quote::QuotePtr> >(new std::map<u_int32_t, Quote::QuotePtr>);
-    m_readerThread = new QuotesReaderThread(m_quotes, m_quotesByIDs);
-}
-
-QuoteDB * QuoteDB::getQuoteDB() {
-    if (instance == NULL) {
-        instance = new QuoteDB;
-    }
-
-    return instance;
-}
-
-void QuoteDB::readQuotes(QuoteController* quoteController) {
-    m_quoteController = quoteController;
-    connect(m_readerThread, &QuotesReaderThread::resultReady, this, &QuoteDB::quotesReady);
-    m_readerThread->start();
-}
-
-int QuoteDB::numQuotes() const {
-    return m_quotes->size();
-}
-
-QSharedPointer<QuoteDB::ContainerType>& QuoteDB::getQuotes() {
-    return m_quotes;
-}
-
-void QuoteDB::quotesReady() {
-    m_quoteController->readingQuotesDone();
-}
-
-Quote::QuotePtr QuoteDB::getQuoteWithID(u_int32_t id) const {
-    std::map<u_int32_t, Quote::QuotePtr>::const_iterator iter
-      = m_quotesByIDs->find(id);
-    if (iter != m_quotesByIDs->end()) {
-        return iter->second;
-    } else {
-        return Quote::QuotePtr();
-    }
-}
-
-QuotesReaderThread::QuotesReaderThread(QSharedPointer<ContainerType>& quotes, QSharedPointer< std::map<u_int32_t, Quote::QuotePtr> >& quotesByIDs) {
-    m_quotes = quotes;
-    m_quotesByIDs = quotesByIDs;
+QuotesReaderThread::QuotesReaderThread() {
+    m_quotes = QuotesDBContainerPtr(new QuotesDBContainerType);
 }
 
 void QuotesReaderThread::run() {
     readQuotes();
-    emit resultReady();
+    emit quotesRead();
 }
 
 bool QuotesReaderThread::readQuotes() {
     QUrl directoryUrl = SailfishApp::pathTo("./");
     QDir directory(directoryUrl.toLocalFile());
     QStringList nameFilters;
-    nameFilters.append("*.json.gz");
+    nameFilters.append("*.json");
     QStringList files = directory.entryList(nameFilters);
+    if (files.length() == 0) {
+        qCritical() << "No valid JSON file found";
+    }
     QStringList::Iterator iter;
     for (iter = files.begin(); iter != files.end(); ++iter) {
         const QString& file = *iter;
@@ -101,7 +59,6 @@ bool QuotesReaderThread::readQuotes() {
         }
     }
     std::sort(m_quotes->begin(), m_quotes->end(), quoteptrCompare);
-    // QuoteModel::getQuoteModel()->repopulateQuotes();
     return true;
 }
 
@@ -145,7 +102,7 @@ QString QuotesReaderThread::readRegularFile(QUrl& pathToFile) {
 }
 
 bool QuotesReaderThread::readQuotesFile(QUrl pathToFile) {
-    QString fileContent = readZFile(pathToFile);
+    QString fileContent = readRegularFile(pathToFile);
     QJsonParseError parseError;
     QJsonDocument jsonDoc
       = QJsonDocument::fromJson(fileContent.toUtf8(), &parseError);
@@ -165,12 +122,35 @@ bool QuotesReaderThread::readQuotesFile(QUrl pathToFile) {
         QString quoteText = jsonQuoteObj["quoteText"].toString();
         QString philosopher = jsonQuoteObj["philosopher"].toString();
 
-        Quote::QuotePtr quote(new Quote(philosopher, quoteText));
+        Quote::QuotePtr quote = createRegisteredQuote(philosopher, quoteText);
         m_quotes->push_back(quote);
-        (*m_quotesByIDs)[quote->uniqueID()] = quote;
     }
 
     return true;
 }
 
+QuotesDBContainerPtr QuotesReaderThread::retrieveQuotes() const {
+    return m_quotes;
+}
+
+QuoteDB::QuoteDB(QObject * parent) : QObject(parent) {
+    m_readerThread = new QuotesReaderThread();
+}
+
+void QuoteDB::asyncDBInit() {
+    connect(m_readerThread, &QuotesReaderThread::quotesRead, this, &QuoteDB::threadFinishedReadingQuotes);
+    m_readerThread->start();
+}
+
+int QuoteDB::numQuotes() const {
+    return m_quotes->size();
+}
+
+void QuoteDB::threadFinishedReadingQuotes() {
+    emit quotesRead();
+}
+
+QuotesDBContainerPtr QuoteDB::getQuotes() const {
+    return m_quotes;
+}
 

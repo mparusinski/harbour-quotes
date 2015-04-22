@@ -21,7 +21,9 @@
 #include <QObject>
 #include <QString>
 #include <QSharedPointer>
-#include "idregistry.h"
+#include "quotesidregistry.h"
+
+class QuotesIDRegistry;
 
 class Quote {
 public:
@@ -35,6 +37,8 @@ public:
 
     QString quote() const;
 
+    void setID(u_int32_t idNum);
+
     u_int32_t uniqueID() const;
 
 private:
@@ -44,6 +48,12 @@ private:
     QString m_quote;
     u_int32_t m_uniqueID;
 };
+
+Quote::QuotePtr getQuoteWithID(u_int32_t idNum);
+
+Quote::QuotePtr createRegisteredQuote(const QString& philosopher, const QString& quote);
+
+void registerQuote(const Quote::QuotePtr& quote);
 
 bool quoteptrCompare(Quote::QuotePtr left, Quote::QuotePtr right);
 

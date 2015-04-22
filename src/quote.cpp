@@ -23,7 +23,6 @@ Quote::Quote(void) {
 Quote::Quote(const QString& philosopher, const QString& quote) {
     m_philosopher = philosopher;
     m_quote = quote;
-    m_uniqueID = IDRegistry::getRegistry()->getNextID();
 }
 
 QString Quote::philosopher() const {
@@ -36,6 +35,24 @@ QString Quote::quote() const {
 
 u_int32_t Quote::uniqueID() const {
     return m_uniqueID;
+}
+
+void Quote::setID(u_int32_t idNum) {
+    m_uniqueID = idNum;
+}
+
+Quote::QuotePtr getQuoteWithID(u_int32_t idNum) {
+    return QuotesIDRegistry::getRegistry()->getQuoteWithID(idNum);
+}
+
+Quote::QuotePtr createRegisteredQuote(const QString& philosopher, const QString& quote) {
+    Quote::QuotePtr quotePtr(new Quote(philosopher, quote));
+    registerQuote(quotePtr);
+    return quotePtr;
+}
+
+void registerQuote(const Quote::QuotePtr& quote) {
+    QuotesIDRegistry::getRegistry()->registerQuote(quote);
 }
 
 bool quoteptrCompare(Quote::QuotePtr left, Quote::QuotePtr right) {

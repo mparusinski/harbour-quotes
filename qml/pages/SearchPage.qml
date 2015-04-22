@@ -105,7 +105,7 @@ Page {
         }
 
         Component.onCompleted: {
-            quoteController.buildSearchPageQuoteModel();
+            internalModel.buildSearchPageQuoteModel();
         }
     }
 }

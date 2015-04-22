@@ -15,8 +15,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef QUOTECONTROLLER_H
-#define QUOTECONTROLLER_H
+#ifndef InternalModelFacade_H
+#define InternalModelFacade_H
 
 #include <set>
 #include <QObject>
@@ -26,12 +26,12 @@
 #include "quotedb.h"
 #include "quotemodel.h"
 
-class QuoteEngineQMLInterface : public QObject {
+class InternalModelWindow : public QObject {
     Q_OBJECT
 public:
-    explicit QuoteEngineQMLInterface(QObject * parent = 0);
+    explicit InternalModelWindow(QObject * parent = 0);
 
-    virtual ~QuoteEngineQMLInterface();
+    virtual ~InternalModelWindow();
 
     void emitSignalDoneReadingQuotes() const;
 
@@ -42,16 +42,16 @@ private:
 
 };
 
-class QuoteController : public QObject {
+class InternalModelFacade : public QObject {
     Q_OBJECT
 public:
     void setMainView(const QSharedPointer<QQuickView>& mainView);
 
-    static QuoteController* getQuoteController();
+    static InternalModelFacade* getInternalModelFacade();
 
-    void addQMLInterface(QuoteEngineQMLInterface* interface);
+    void addQMLInterface(InternalModelWindow* interface);
 
-    void removeQMLInterface(QuoteEngineQMLInterface* interface);
+    void removeQMLInterface(InternalModelWindow* interface);
 
     Q_INVOKABLE void loadQuote(const QString& quoteID);
 
@@ -67,29 +67,29 @@ public:
 
     Q_INVOKABLE int quoteNumber() const;
 
-    Q_INVOKABLE void readQuotesDB();
+    Q_INVOKABLE void aynscReadQuotesDB();
 
     Q_INVOKABLE void setupQuoteModel() const;
 
     Q_INVOKABLE void buildSearchPageQuoteModel() const;
 
-    void readingQuotesDone() const;
-
 signals:
 
 public slots:
+   void readingQuotesDone() const;
 
 private:
-    Q_DISABLE_COPY(QuoteController)
+    Q_DISABLE_COPY(InternalModelFacade)
 
-    explicit QuoteController(QObject* parent = 0);
+    explicit InternalModelFacade(QObject* parent = 0);
 
     QSharedPointer<QQuickView> m_mainView;
     Quote::QuotePtr m_currentQuote;
     std::list<Quote::QuotePtr>::iterator m_modelIterator;
-    std::set<QuoteEngineQMLInterface*> m_interfaces;
+    std::set<InternalModelWindow*> m_interfaces;
+    QuoteDB m_quotesDB;
 
-    static QuoteController* instance;
+    static InternalModelFacade* instance;
 };
 
-#endif // QUOTECONTROLLER_H
+#endif // InternalModelFacade_H
