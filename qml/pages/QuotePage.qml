@@ -73,6 +73,7 @@ Page {
                 id: subColumn
                 spacing: Theme.paddingLarge
                 anchors.top: pageHeader.top
+                anchors.margins: Theme.paddingLarge
                 width: page.width
                 height: Math.max(quoteField.height + philosopherField.height + 4 * Theme.paddingLarge, page.height - pageHeader.height - Theme.paddingLarge)
 
@@ -80,9 +81,10 @@ Page {
                     id: quoteField
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    anchors.margins: Theme.paddingLarge
                     anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: Theme.paddingSmall
                     width: parent.width
+                    verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignJustify
                     wrapMode: Text.WordWrap
                     text: quoteText()
@@ -102,6 +104,7 @@ Page {
                     color: Theme.secondaryHighlightColor
                     font.pixelSize: Theme.fontSizeMedium
                 }
+
             }
         }
 

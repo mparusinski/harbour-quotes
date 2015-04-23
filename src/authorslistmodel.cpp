@@ -1,6 +1,7 @@
 #include "authorslistmodel.h"
 
 #include <QDebug>
+#include <algorithm>
 
 AuthorsListModel::AuthorsListModel(QObject *parent) :
     QAbstractListModel(parent) {
@@ -22,6 +23,7 @@ void AuthorsListModel::repopulateListModel(AuthorsDBContainerPtr authors) {
         m_authorsVisible->push_back(*iter);
     }
     m_authorNum = newSize;
+    std::sort(m_authorsVisible->begin(), m_authorsVisible->end());
     endInsertRows();
 }
 

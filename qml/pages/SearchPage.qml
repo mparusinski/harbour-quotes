@@ -85,7 +85,7 @@ Page {
                 placeholderText: "Search"
 
                 onTextChanged: {
-                    internalModel.filterUsingSearchString(text);
+                    internalModel.filterSearchPageUsingSearchString(text);
                 }
 
                 Keys.onReturnPressed: {
