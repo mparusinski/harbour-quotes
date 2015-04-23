@@ -83,9 +83,13 @@ int InternalModelFacade::quoteNumber() const {
     return m_searchPageListModel.rowCount();
 }
 
-void InternalModelFacade::filterUsingSearchString(const QString& searchString) {
-    m_searchPageListModel.repopulateQuotes(m_quotesDB.getQuotes());
+void InternalModelFacade::filterSearchPageUsingSearchString(const QString& searchString) {
+    buildSearchPageListModel();
     m_searchPageListModel.filterUsing(searchString);
+}
+
+void InternalModelFacade::loadAuthor(const QString& author) {
+    m_currentAuthor = author;
 }
 
 void InternalModelFacade::loadQuote(const QString& quoteID) {
@@ -95,7 +99,8 @@ void InternalModelFacade::loadQuote(const QString& quoteID) {
 }
 
 void InternalModelFacade::buildSearchPageListModel() {
-    m_searchPageListModel.repopulateQuotes(m_quotesDB.getQuotes());
+    QuotesDBContainerPtr quotesDB = m_quotesDB.getQuotes();
+    m_searchPageListModel.repopulateListModel((*quotesDB)[m_currentAuthor]);
 }
 
 void InternalModelFacade::aynscReadQuotesDB() {
@@ -116,4 +121,14 @@ void InternalModelFacade::readingQuotesDone() const {
 void InternalModelFacade::setupSearchPageListModel() {
     QQmlContext * rootCtx = m_mainView->rootContext();
     rootCtx->setContextProperty("searchPageListModel", &m_searchPageListModel);
+}
+
+void InternalModelFacade::buildAuthorsPageListModel() {
+    AuthorsDBContainerPtr authors = m_quotesDB.getAuthors();
+    m_authorsPageListModel.repopulateListModel(authors);
+}
+
+void InternalModelFacade::setupAuthorsPageListModel() {
+    QQmlContext * rootCtx = m_mainView->rootContext();
+    rootCtx->setContextProperty("authorsPageListModel", &m_authorsPageListModel);
 }

@@ -20,6 +20,7 @@
 
 SearchPageListModel::SearchPageListModel(QObject *parent)
     : QAbstractListModel(parent) {
+    m_quotesVisible = QuotesContainerPtr(new QuotesContainerType);
     m_roles[QuoteRole] = "quote";
     m_roles[PhilosopherRole] = "philosopher";
     m_roles[QuoteIDRole] = "quoteID";
@@ -29,30 +30,22 @@ SearchPageListModel::SearchPageListModel(QObject *parent)
 SearchPageListModel::~SearchPageListModel() {
 }
 
-void SearchPageListModel::pushQuote(const Quote::QuotePtr& quote) {
-    beginInsertRows(QModelIndex(), m_quoteNum, m_quoteNum);
-    m_quotesVisible.push_back(quote);
-    m_quoteNum++;
-    endInsertRows();
-}
-
-void SearchPageListModel::repopulateQuotes(QuotesDBContainerPtr quotes) {
+void SearchPageListModel::repopulateListModel(AuthorsQuotesDBContainerPtr quotes) {
     clearModel();
-    int newSize = quotes->size();
+    int newSize = quotes->size(); 
     beginInsertRows(QModelIndex(), 0, newSize - 1);
-    int index = 0;
-    for (QuotesDBContainerType::iterator iter = quotes->begin(); iter != quotes->end(); ++iter) {
-        m_quotesVisible.push_back(*iter);
-        m_rowsToQuotes[index++] = *iter;
+    for (AuthorsQuotesDBContainerType::iterator iter = quotes->begin();
+            iter != quotes->end(); ++iter) {
+        m_quotesVisible->push_back(*iter);
     }
     m_quoteNum = newSize;
     endInsertRows();
 }
 
-std::list<Quote::QuotePtr>::iterator SearchPageListModel::getIterToQuote(
+SearchPageListModel::QuotesContainerType::iterator SearchPageListModel::getIterToQuote(
   u_int32_t quoteID) {
-    std::list<Quote::QuotePtr>::iterator iter = m_quotesVisible.begin();
-    for ( ; iter != m_quotesVisible.end(); ++iter) {
+    QuotesContainerType::iterator iter = m_quotesVisible->begin();
+    for ( ; iter != m_quotesVisible->end(); ++iter) {
         const Quote::QuotePtr& quote = *iter;
         if (quote->uniqueID() == quoteID) {
             return iter;
@@ -64,8 +57,7 @@ std::list<Quote::QuotePtr>::iterator SearchPageListModel::getIterToQuote(
 void SearchPageListModel::clearModel() {
     if (m_quoteNum > 0) {
         beginRemoveRows(QModelIndex(), 0, m_quoteNum - 1);
-        m_quotesVisible.clear();
-        m_rowsToQuotes.clear();
+        m_quotesVisible->clear();
         m_quoteNum = 0;
         endRemoveRows();
     }
@@ -83,23 +75,20 @@ void SearchPageListModel::filterUsing(const QString& searchString) {
 
 void SearchPageListModel::filterUsingToken(const QString& tokenString) {
     int index = -1;
-    std::list<Quote::QuotePtr> newQuotesVisible;
-    for (std::list<Quote::QuotePtr>::iterator iter = m_quotesVisible.begin(); iter != m_quotesVisible.end(); ++iter) {
+    QuotesContainerPtr newQuotesVisible(new QuotesContainerType);
+    for (QuotesContainerType::iterator iter = m_quotesVisible->begin();
+         iter != m_quotesVisible->end(); ++iter) {
         const Quote::QuotePtr& elem = *iter;
         index++;
-        const QString & philosopher = elem->philosopher();
         const QString & quote = elem->quote();
-        bool strContained =
-             philosopher.contains(tokenString, Qt::CaseInsensitive)
-          || quote.contains(tokenString, Qt::CaseInsensitive);
+        bool strContained =quote.contains(tokenString, Qt::CaseInsensitive);
         if (!strContained) {
             beginRemoveRows(QModelIndex(), index, index);
             m_quoteNum--;
             endRemoveRows();
             index--;
         } else {
-           newQuotesVisible.push_back(elem);
-           m_rowsToQuotes[index] = elem;
+           newQuotesVisible->push_back(elem);
         }
     }
     m_quotesVisible = newQuotesVisible;
@@ -111,7 +100,7 @@ int SearchPageListModel::rowCount(const QModelIndex &parent) const {
 
 QVariant SearchPageListModel::data(const QModelIndex &index, int role) const {
     int rowNum = index.row();
-    Quote::QuotePtr elem = m_rowsToQuotes.at(rowNum);
+    Quote::QuotePtr elem = (*m_quotesVisible)[rowNum];
     if (role == QuoteRole) {
         return QVariant::fromValue(elem->quote());
     } else if (role == PhilosopherRole) {
@@ -130,24 +119,18 @@ QHash<int, QByteArray> SearchPageListModel::roleNames() const {
 }
 
 void SearchPageListModel::circularNext(
-        std::list<Quote::QuotePtr>::iterator& iter) {
+        QuotesContainerType::iterator& iter) {
     ++iter;
-    if (iter == m_quotesVisible.end()) {
-        iter = m_quotesVisible.begin();
+    if (iter == m_quotesVisible->end()) {
+        iter = m_quotesVisible->begin();
     }
 }
 
 void SearchPageListModel::circularPrev(
-        std::list<Quote::QuotePtr>::iterator& iter) {
-    if (iter == m_quotesVisible.begin()) {
-        iter = m_quotesVisible.end();
+        QuotesContainerType::iterator& iter) {
+    if (iter == m_quotesVisible->begin()) {
+        iter = m_quotesVisible->end();
     }
     --iter;
 }
 
-void SearchPageListModel::printAllQuotes() const {
-    for (std::list<Quote::QuotePtr>::const_iterator iter = m_quotesVisible.begin(); iter != m_quotesVisible.end(); ++iter) {
-        Quote::QuotePtr quote = *iter;
-        qDebug() << quote->quote();
-    }
-}

@@ -25,6 +25,7 @@
 #include "quote.h"
 #include "quotedb.h"
 #include "searchpagelistmodel.h"
+#include "authorslistmodel.h"
 
 class InternalModelWindow : public QObject {
     Q_OBJECT
@@ -63,7 +64,7 @@ public:
 
     Q_INVOKABLE void prevQuote();
 
-    Q_INVOKABLE void filterUsingSearchString(const QString& searchString);
+    Q_INVOKABLE void filterSearchPageUsingSearchString(const QString& searchString);
 
     Q_INVOKABLE int quoteNumber() const;
 
@@ -72,6 +73,12 @@ public:
     Q_INVOKABLE void setupSearchPageListModel();
 
     Q_INVOKABLE void buildSearchPageListModel();
+
+    Q_INVOKABLE void setupAuthorsPageListModel();
+
+    Q_INVOKABLE void buildAuthorsPageListModel();
+
+    Q_INVOKABLE void loadAuthor(const QString& author);
 
 signals:
 
@@ -85,10 +92,12 @@ private:
 
     QSharedPointer<QQuickView> m_mainView;
     Quote::QuotePtr m_currentQuote;
-    std::list<Quote::QuotePtr>::iterator m_modelIterator;
+    SearchPageListModel::QuotesContainerType::iterator m_modelIterator;
     std::set<InternalModelWindow*> m_interfaces;
+    QString m_currentAuthor;
     QuoteDB m_quotesDB;
     SearchPageListModel m_searchPageListModel;
+    AuthorsListModel m_authorsPageListModel;
 
     static InternalModelFacade* instance;
 };

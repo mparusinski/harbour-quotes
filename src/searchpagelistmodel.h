@@ -13,23 +13,24 @@ class SearchPageListModel : public QAbstractListModel
     Q_OBJECT
 
 public:
+    typedef std::vector<Quote::QuotePtr> QuotesContainerType;
+    typedef QSharedPointer<QuotesContainerType> QuotesContainerPtr;
+
     enum QuoteRoles {
         QuoteRole = Qt::UserRole + 1,
         PhilosopherRole,
         QuoteIDRole
     };
 
+    explicit SearchPageListModel(QObject *parent = 0);
+
     virtual ~SearchPageListModel();
 
-    SearchPageListModel(QObject *parent = 0);
-
-    void pushQuote(const Quote::QuotePtr& quote);
-
-    void repopulateQuotes(QuotesDBContainerPtr quotes);
+    void repopulateListModel(AuthorsQuotesDBContainerPtr quotes);
 
     void filterUsing(const QString& searchString);
 
-    std::list<Quote::QuotePtr>::iterator getIterToQuote(u_int32_t quoteID);
+    QuotesContainerType::iterator getIterToQuote(u_int32_t quoteID);
 
     virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
 
@@ -37,9 +38,9 @@ public:
 
     virtual QHash<int, QByteArray> roleNames() const;
 
-    void circularNext(std::list<Quote::QuotePtr>::iterator& iter);
+    void circularNext(QuotesContainerType::iterator& iter);
 
-    void circularPrev(std::list<Quote::QuotePtr>::iterator& iter);
+    void circularPrev(QuotesContainerType::iterator& iter);
 
     // DEBUG METHOD
     void printAllQuotes() const;
@@ -52,8 +53,7 @@ private:
     void filterUsingToken(const QString& tokenString);
 
     QHash<int, QByteArray> m_roles;
-    std::list<Quote::QuotePtr> m_quotesVisible;
-    std::map<int, Quote::QuotePtr> m_rowsToQuotes;
+    QuotesContainerPtr m_quotesVisible;
     int m_quoteNum;
 
 };

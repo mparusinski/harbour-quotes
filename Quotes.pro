@@ -20,7 +20,8 @@ SOURCES += src/Quotes.cpp \
     src/quotedb.cpp \
     src/internalmodelfacade.cpp \
     src/quotesidregistry.cpp \
-    src/searchpagelistmodel.cpp
+    src/searchpagelistmodel.cpp \
+    src/authorslistmodel.cpp
 
 OTHER_FILES += qml/Quotes.qml \
     qml/cover/CoverPage.qml \
@@ -35,7 +36,8 @@ OTHER_FILES += qml/Quotes.qml \
     qml/pages/AboutPage.qml \
     qml/pages/QuotePage.qml \
     qml/pages/SearchPage.qml \
-    qml/pages/Loading.qml
+    qml/pages/Loading.qml \
+    qml/pages/AuthorsPage.qml
 
 quotes.files = quotesdb/*.json
 quotes.path = /usr/share/$${TARGET}
@@ -52,6 +54,9 @@ HEADERS += \
     src/quotedb.h \
     src/internalmodelfacade.h \
     src/quotesidregistry.h \
-    src/searchpagelistmodel.h
+    src/searchpagelistmodel.h \
+    src/authorslistmodel.h
+
+RESOURCES +=
 
 

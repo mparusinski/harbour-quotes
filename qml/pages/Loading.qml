@@ -41,13 +41,14 @@ Page {
 
         Component.onCompleted: {
             internalModel.setupSearchPageListModel();
+            internalModel.setupAuthorsPageListModel();
             internalModel.aynscReadQuotesDB();
         }
 
         InternalModelWindow {
             onDoneReadingQuotes: {
                 busyIndicator.running = false;
-                pageStack.replace(Qt.resolvedUrl('SearchPage.qml'), {}, PageStackAction.Immediate);
+                pageStack.replace(Qt.resolvedUrl('AuthorsPage.qml'), {}, PageStackAction.Immediate);
             }
         }
 

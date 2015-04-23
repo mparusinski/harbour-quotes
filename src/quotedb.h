@@ -25,8 +25,12 @@
 
 #include "quote.h"
 
-typedef std::vector<Quote::QuotePtr> QuotesDBContainerType;
+typedef std::vector<Quote::QuotePtr> AuthorsQuotesDBContainerType;
+typedef QSharedPointer< AuthorsQuotesDBContainerType > AuthorsQuotesDBContainerPtr;
+typedef std::map<QString, AuthorsQuotesDBContainerPtr> QuotesDBContainerType;
 typedef QSharedPointer< QuotesDBContainerType > QuotesDBContainerPtr;
+typedef std::set<QString> AuthorsDBContainerType;
+typedef QSharedPointer< AuthorsDBContainerType > AuthorsDBContainerPtr;
 
 class QuotesReaderThread : public QThread {
     Q_OBJECT
@@ -39,17 +43,20 @@ public:
 
     QuotesDBContainerPtr retrieveQuotes() const;
 
+    AuthorsDBContainerPtr retrieveAuthors() const;
+
 signals:
     void quotesRead();
 
-private:
-    QuotesDBContainerPtr m_quotes;
-
+private:   
     bool readQuotesFile(QUrl filepath);
 
     QString readRegularFile(QUrl& pathToFile);
 
     QString readZFile(QUrl& pathToFile);
+
+    QuotesDBContainerPtr m_quotes;
+    AuthorsDBContainerPtr m_authors;
 };
 
 class QuoteDB : public QObject {
@@ -61,7 +68,7 @@ public:
 
     QuotesDBContainerPtr getQuotes() const;
 
-    int numQuotes() const;
+    AuthorsDBContainerPtr getAuthors() const;
 
 public slots:
     void threadFinishedReadingQuotes();
@@ -73,6 +80,7 @@ private:
     Q_DISABLE_COPY(QuoteDB)
 
     QuotesDBContainerPtr m_quotes;
+    AuthorsDBContainerPtr m_authors;
     QuotesReaderThread * m_readerThread;
 };
 

@@ -10,6 +10,14 @@
     </message>
 </context>
 <context>
+    <name>AuthorsPage</name>
+    <message>
+        <location filename="../qml/pages/AuthorsPage.qml" line="23"/>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CoverPage</name>
     <message>
         <location filename="../qml/cover/CoverPage.qml" line="42"/>

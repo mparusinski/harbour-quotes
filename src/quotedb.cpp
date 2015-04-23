@@ -32,6 +32,7 @@
 
 QuotesReaderThread::QuotesReaderThread() {
     m_quotes = QuotesDBContainerPtr(new QuotesDBContainerType);
+    m_authors = AuthorsDBContainerPtr(new AuthorsDBContainerType);
 }
 
 void QuotesReaderThread::run() {
@@ -56,7 +57,11 @@ bool QuotesReaderThread::readQuotes() {
             return false;
         }
     }
-    std::sort(m_quotes->begin(), m_quotes->end(), quoteptrCompare);
+    for (AuthorsDBContainerType::const_iterator iter = m_authors->begin();
+            iter != m_authors->end(); ++iter) {
+        AuthorsQuotesDBContainerPtr authorsQuotes = (*m_quotes)[*iter];
+        std::sort(authorsQuotes->begin(), authorsQuotes->end(), quoteptrCompare);
+    }
     return true;
 }
 
@@ -121,7 +126,13 @@ bool QuotesReaderThread::readQuotesFile(QUrl pathToFile) {
         QString philosopher = jsonQuoteObj["philosopher"].toString();
 
         Quote::QuotePtr quote = createRegisteredQuote(philosopher, quoteText);
-        m_quotes->push_back(quote);
+
+        m_authors->insert(philosopher);
+        if (m_quotes->find(philosopher) == m_quotes->end()) {
+            (*m_quotes)[philosopher] = AuthorsQuotesDBContainerPtr(new AuthorsQuotesDBContainerType);
+        }
+        AuthorsQuotesDBContainerPtr authorsQuotes = (*m_quotes)[philosopher];
+        authorsQuotes->push_back(quote);
     }
 
     return true;
@@ -129,6 +140,10 @@ bool QuotesReaderThread::readQuotesFile(QUrl pathToFile) {
 
 QuotesDBContainerPtr QuotesReaderThread::retrieveQuotes() const {
     return m_quotes;
+}
+
+AuthorsDBContainerPtr QuotesReaderThread::retrieveAuthors() const {
+    return m_authors;
 }
 
 QuoteDB::QuoteDB(QObject * parent) : QObject(parent) {
@@ -140,16 +155,17 @@ void QuoteDB::asyncDBInit() {
     m_readerThread->start();
 }
 
-int QuoteDB::numQuotes() const {
-    return m_quotes->size();
-}
-
 void QuoteDB::threadFinishedReadingQuotes() {
     m_quotes = m_readerThread->retrieveQuotes();
+    m_authors = m_readerThread->retrieveAuthors();
     emit quotesRead();
 }
 
 QuotesDBContainerPtr QuoteDB::getQuotes() const {
     return m_quotes;
+}
+
+AuthorsDBContainerPtr QuoteDB::getAuthors() const {
+    return m_authors;
 }
 
