@@ -52,7 +52,8 @@ Quote::QuotePtr createRegisteredQuote(const QString& philosopher, const QString&
 }
 
 void registerQuote(const Quote::QuotePtr& quote) {
-    QuotesIDRegistry::getRegistry()->registerQuote(quote);
+    u_int32_t uniqueID = QuotesIDRegistry::getRegistry()->registerQuote(quote);
+    quote->setID(uniqueID);
 }
 
 bool quoteptrCompare(Quote::QuotePtr left, Quote::QuotePtr right) {
