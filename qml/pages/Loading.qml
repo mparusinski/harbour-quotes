@@ -16,7 +16,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-import com.parusinskimichal.quotes.engine 1.0
+import harbour.quotes.internalmodelwindow 1.0
 
 Page {
     backNavigation: false

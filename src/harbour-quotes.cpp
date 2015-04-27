@@ -23,7 +23,7 @@
 
 int main(int argc, char *argv[]) {
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
-    qmlRegisterType<InternalModelWindow>("com.parusinskimichal.quotes.engine", 1, 0, "InternalModelWindow");
+    qmlRegisterType<InternalModelWindow>("harbour.quotes.internalmodelwindow", 1, 0, "InternalModelWindow");
     QSharedPointer<QQuickView> view(SailfishApp::createView());
     InternalModelFacade::getInternalModelFacade()->setMainView(view);
 

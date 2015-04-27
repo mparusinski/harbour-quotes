@@ -53,8 +53,6 @@ private:
 
     QString readRegularFile(QUrl& pathToFile);
 
-    QString readZFile(QUrl& pathToFile);
-
     QuotesDBContainerPtr m_quotes;
     AuthorsDBContainerPtr m_authors;
 };

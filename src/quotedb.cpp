@@ -65,31 +65,6 @@ bool QuotesReaderThread::readQuotes() {
     return true;
 }
 
-QString QuotesReaderThread::readZFile(QUrl& pathToFile) {
-    QString localFile = pathToFile.toLocalFile();
-    gzFile inFileZ = gzopen(localFile.toStdString().c_str(), "rb");
-    if (inFileZ == NULL) {
-        qCritical() << "Unable to open file " << qPrintable(localFile);
-        qDebug() << "Current path is " << QDir::currentPath();
-        return "";
-    }
-    char unzipBuffer[8192];
-    int unzippedBytes;
-    std::vector<char> unzippedData;
-    while (true) {
-        unzippedBytes = gzread(inFileZ, unzipBuffer, 8192);
-        if (unzippedBytes > 0) {
-            for (int i = 0; i < unzippedBytes; i++) {
-                unzippedData.push_back(unzipBuffer[i]);
-            }
-        } else {
-            break;
-        }
-    }
-    gzclose(inFileZ);
-    return QString::fromUtf8(&unzippedData[0]);
-}
-
 QString QuotesReaderThread::readRegularFile(QUrl& pathToFile) {
     QString localFile = pathToFile.toLocalFile();
     QFile quotesFile(localFile);
