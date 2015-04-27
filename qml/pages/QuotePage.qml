@@ -82,7 +82,7 @@ Page {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.margins: Theme.paddingSmall
+                    anchors.margins: Theme.paddingLarge
                     width: parent.width
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignJustify

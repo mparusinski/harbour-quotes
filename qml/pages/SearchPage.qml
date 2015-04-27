@@ -14,6 +14,7 @@
 */
 
 import QtQuick 2.0
+import QtGraphicalEffects 1.0
 import Sailfish.Silica 1.0
 
 Page {
@@ -39,12 +40,18 @@ Page {
             width: parent.width
             Text {
                 id: quoteText
-                color: Theme.primaryColor
+                // color: Theme.primaryColor
+                // height: Theme.fontSizeMedium
+                width: parent.width
+                maximumLineCount: 2
+                // elide: Text.ElideRight
+                // wrapMode: Text.Wrap
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.leftMargin: Theme.paddingLarge
                 text: "<p>" + quote + "</p>"
                 font.pixelSize: Theme.fontSizeMedium
+                visible: false
                 clip: true
                 MouseArea {
                     anchors.fill: parent
@@ -54,8 +61,20 @@ Page {
                     }
                 }
             }
+            LinearGradient  {
+                    anchors.fill: quoteText
+                    source: quoteText
+                    start: Qt.point(0, 0)
+                    end: Qt.point(quoteText.width, 0)
+                    gradient: Gradient {
+                        GradientStop { position: 0; color: Theme.primaryColor }
+                        GradientStop { position: 0.7; color: Theme.primaryColor }
+                        GradientStop { position: 1; color: "transparent" }
+                    }
+                }
             Text {
                 id: philosopherText
+                anchors.top: quoteText.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.rightMargin: Theme.paddingLarge
