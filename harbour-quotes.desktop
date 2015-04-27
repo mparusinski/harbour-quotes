@@ -2,7 +2,7 @@
 Type=Application
 X-Nemo-Application-Type=silica-qt5
 Icon=harbour-quotes
-Exec=Quotes
+Exec=harbour-quotes
 Name=Quotes
 # translation example:
 # your app name in German locale (de)

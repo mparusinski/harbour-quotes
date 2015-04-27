@@ -13,7 +13,6 @@
 TARGET = harbour-quotes
 
 CONFIG += sailfishapp
-PKGCONFIG += zlib
 
 SOURCES += \
     src/quote.cpp \

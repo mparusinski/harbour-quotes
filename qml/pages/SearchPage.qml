@@ -45,10 +45,11 @@ Page {
                 width: parent.width
                 maximumLineCount: 2
                 // elide: Text.ElideRight
-                // wrapMode: Text.Wrap
+                wrapMode: Text.WrapAnywhere
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.leftMargin: Theme.paddingLarge
+                anchors.rightMargin: Theme.paddingLarge
                 text: "<p>" + quote + "</p>"
                 font.pixelSize: Theme.fontSizeMedium
                 visible: false
