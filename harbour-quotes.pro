@@ -22,29 +22,29 @@ SOURCES += \
     src/quotesidregistry.cpp \
     src/searchpagelistmodel.cpp \
     src/authorslistmodel.cpp \
-    src/Quotes.cpp
+    src/harbour-quotes.cpp
 
 OTHER_FILES += \
     qml/cover/CoverPage.qml \
     qml/content/images/*.png \
-    rpm/Quotes.changes.in \
-    rpm/Quotes.spec \
-    rpm/Quotes.yaml \
     translations/*.ts \
     quotesdb/*.json \
-    Quotes.png \
     qml/pages/AboutPage.qml \
     qml/pages/QuotePage.qml \
     qml/pages/SearchPage.qml \
     qml/pages/Loading.qml \
     qml/pages/AuthorsPage.qml \
-    Quotes.desktop \
-    qml/Quotes.qml
+    harbour-quotes.desktop \
+    harbour-quotes.png \
+    rpm/harbour-quotes.yaml \
+    rpm/harbour-quotes.spec \
+    rpm/harbour-quotes.changes.in \
+    qml/harbour-quotes.qml
 
 harbour-quotes.files = quotesdb/*.json
 harbour-quotes.path = /usr/share/$${TARGET}
 
-INSTALLS += quotes
+INSTALLS += harbour-quotes
 
 # to disable building translations every time, comment out the
 # following CONFIG line

@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
 X-Nemo-Application-Type=silica-qt5
-Icon=Quotes
+Icon=harbour-quotes
 Exec=Quotes
 Name=Quotes
 # translation example:
 # your app name in German locale (de)
-Name[de]=Quotes
+# Name[de]=Quotes
 

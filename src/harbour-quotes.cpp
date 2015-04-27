@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
     InternalModelFacade::getInternalModelFacade()->setMainView(view);
 
     view->rootContext()->setContextProperty("internalModel", InternalModelFacade::getInternalModelFacade());
-    view->setSource(SailfishApp::pathTo("qml/Quotes.qml"));
+    view->setSource(SailfishApp::pathTo("qml/harbour-quotes.qml"));
     view->show();
 
     return app->exec();
