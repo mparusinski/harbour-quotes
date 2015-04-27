@@ -10,20 +10,21 @@
 #   - translation filenames have to be changed
 
 # The name of your application
-TARGET = Quotes
+TARGET = harbour-quotes
 
 CONFIG += sailfishapp
 PKGCONFIG += zlib
 
-SOURCES += src/Quotes.cpp \
+SOURCES += \
     src/quote.cpp \
     src/quotedb.cpp \
     src/internalmodelfacade.cpp \
     src/quotesidregistry.cpp \
     src/searchpagelistmodel.cpp \
-    src/authorslistmodel.cpp
+    src/authorslistmodel.cpp \
+    src/Quotes.cpp
 
-OTHER_FILES += qml/Quotes.qml \
+OTHER_FILES += \
     qml/cover/CoverPage.qml \
     qml/content/images/*.png \
     rpm/Quotes.changes.in \
@@ -31,23 +32,24 @@ OTHER_FILES += qml/Quotes.qml \
     rpm/Quotes.yaml \
     translations/*.ts \
     quotesdb/*.json \
-    Quotes.desktop \
     Quotes.png \
     qml/pages/AboutPage.qml \
     qml/pages/QuotePage.qml \
     qml/pages/SearchPage.qml \
     qml/pages/Loading.qml \
-    qml/pages/AuthorsPage.qml
+    qml/pages/AuthorsPage.qml \
+    Quotes.desktop \
+    qml/Quotes.qml
 
-quotes.files = quotesdb/*.json
-quotes.path = /usr/share/$${TARGET}
+harbour-quotes.files = quotesdb/*.json
+harbour-quotes.path = /usr/share/$${TARGET}
 
 INSTALLS += quotes
 
 # to disable building translations every time, comment out the
 # following CONFIG line
-CONFIG += sailfishapp_i18n
-TRANSLATIONS += translations/Quotes-de.ts
+# CONFIG += sailfishapp_i18n
+# TRANSLATIONS += translations/Quotes-de.ts
 
 HEADERS += \
     src/quote.h \
