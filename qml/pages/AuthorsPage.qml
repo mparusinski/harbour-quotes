@@ -35,6 +35,7 @@ Page {
         currentIndex: -1
 
         delegate: Column {
+            id: delegate
             spacing: Theme.paddingLarge
             height: authorText.height + Theme.paddingLarge * 2
             width: parent.width
@@ -47,12 +48,12 @@ Page {
                 color: Theme.primaryColor
                 text: author
                 font.pixelSize: Theme.fontSizeMedium
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        internalModel.loadAuthor(author);
-                        pageStack.push(Qt.resolvedUrl("SearchPage.qml"))
-                    }
+            }
+            MouseArea {
+                anchors.fill: delegate
+                onClicked: {
+                    internalModel.loadAuthor(author);
+                    pageStack.push(Qt.resolvedUrl("SearchPage.qml"))
                 }
             }
         }

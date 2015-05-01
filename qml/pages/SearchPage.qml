@@ -36,6 +36,7 @@ Page {
         currentIndex: -1
 
         delegate: Column {
+            id: columnContainer
             height: quoteText.height + philosopherText.height
             width: parent.width
             Text {
@@ -54,13 +55,6 @@ Page {
                 font.pixelSize: Theme.fontSizeMedium
                 visible: false
                 clip: true
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        internalModel.loadQuote(quoteID);
-                        pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
-                    }
-                }
             }
             LinearGradient  {
                     anchors.fill: quoteText
@@ -89,6 +83,13 @@ Page {
                         internalModel.loadQuote(quoteID);
                         pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
                     }
+                }
+            }
+            MouseArea {
+                anchors.fill: columnContainer
+                onClicked: {
+                    internalModel.loadQuote(quoteID);
+                    pageStack.push(Qt.resolvedUrl("QuotePage.qml"))
                 }
             }
         }

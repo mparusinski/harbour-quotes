@@ -25,7 +25,6 @@ SOURCES += \
 
 OTHER_FILES += \
     qml/cover/CoverPage.qml \
-    qml/content/images/*.png \
     translations/*.ts \
     quotesdb/*.json \
     qml/pages/AboutPage.qml \

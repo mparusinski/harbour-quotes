@@ -14,32 +14,42 @@
 */
 
 import QtQuick 2.0
+import QtGraphicalEffects 1.0
 import Sailfish.Silica 1.0
 
 CoverBackground {
     id: coverBackground
 
         Column {
+            id: columnContainer
             height: coverBackground.height
             width: coverBackground.width
             spacing: Theme.paddingSmall
-            Image {
+
+            Text {
+                id: quoteText
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.margins: Theme.paddingSmall
-                source: "../content/images/Cover.png"
-                fillMode: Image.Stretch
-                height: parent.height - 2 * Theme.fontSizeSmall
                 width: parent.width
+                horizontalAlignment: Text.Center
+                anchors.verticalCenter: parent.verticalCenter
+                wrapMode: Text.WordWrap
+                text: qsTr("<b>Quotes</b>")
+                color: Theme.primaryColor
+                font.pixelSize: Theme.fontSizeLarge
             }
+
             Text {
+//                anchors.top: coverImage.bottom
+                anchors.top: quoteText.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.margins: Theme.paddingSmall
                 width: parent.width
                 horizontalAlignment: Text.Center
                 wrapMode: Text.WordWrap
-                text: qsTr("<b>Cogito Ergo Sum</b>")
+                text: qsTr("Cogito Ergo Sum")
                 color: Theme.primaryColor
                 font.pixelSize: Theme.fontSizeSmall
             }
